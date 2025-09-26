@@ -39,7 +39,7 @@ jobs:
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4  # 成熟的Action，专门用来推gh-pages
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub自动生成的令牌，不用你管
+          github_token: ${{ secrets.HEXO_DEPLOY_TOKEN }}  # GitHub自动生成的令牌，不用你管
           publish_branch: gh-pages  # 要推送到的分支（自动创建这个分支）
           publish_dir: ./public  # Hexo生成的静态文件在public文件夹里，推这个文件夹的内容
           user_name: 'github-actions[bot]'  # 提交者名字（固定，不用改）
