@@ -1,0 +1,46 @@
+name: Hexo Auto Deploy  # 工作流名称，随便起，比如“Hexo自动部署”
+
+# 触发条件：只有往main分支推送代码时，才执行这个工作流
+on:
+  push:
+    branches:
+      - main
+
+# 工作流要做的事情（任务）
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # 用Ubuntu系统运行（稳定、速度快）
+    steps:
+      # 第一步：把GitHub上main分支的源码拉到服务器（Actions的临时服务器）
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main  # 拉取main分支的代码
+          fetch-depth: 0  # 拉取所有历史记录（避免Hexo构建出错）
+
+      # 第二步：安装Node.js（Hexo需要Node.js才能运行）
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'  # 用Node.js 18.x LTS版本（稳定，和你本地22.x兼容）
+          cache: 'npm'  # 缓存npm依赖，加快下次构建速度
+
+      # 第三步：安装Hexo的依赖包（就是本地npm install那一步，Actions帮你自动跑）
+      - name: Install Hexo dependencies
+        run: |
+          npm install -g hexo-cli  # 全局安装Hexo命令行
+          npm install  # 安装package.json里的依赖
+
+      # 第四步：生成静态文件（就是本地hexo g那一步）
+      - name: Generate Hexo static files
+        run: hexo clean && hexo generate  # clean清除旧文件，generate生成新静态文件
+
+      # 第五步：把生成的静态文件推送到gh-pages分支
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4  # 成熟的Action，专门用来推gh-pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub自动生成的令牌，不用你管
+          publish_branch: gh-pages  # 要推送到的分支（自动创建这个分支）
+          publish_dir: ./public  # Hexo生成的静态文件在public文件夹里，推这个文件夹的内容
+          user_name: 'github-actions[bot]'  # 提交者名字（固定，不用改）
+          user_email: 'github-actions[bot]@users.noreply.github.com'  # 提交者邮箱（固定）
