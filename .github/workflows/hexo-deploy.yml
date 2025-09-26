@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'  # 用Node.js 18.x LTS版本（稳定，和你本地22.x兼容）
+          node-version: '22.x'  # 用Node.js 18.x LTS版本（稳定，和你本地22.x兼容）
           cache: 'npm'  # 缓存npm依赖，加快下次构建速度
 
       # 第三步：安装Hexo的依赖包（就是本地npm install那一步，Actions帮你自动跑）
