@@ -1,0 +1,141 @@
+---
+title: 缤纷云bitiful对象储存配合Picgo免费图床
+cover: 'https://bitiful.814925.xyz/2024/11/25/202411251521793.webp'
+swiper_index: 10
+top_group_index: 10
+background: '#fff'
+tags:
+  - 图床
+  - 白嫖
+categories:
+  - 教程
+abbrlink: f5b7655d
+date: 2024-11-08 16:25:49
+updated:
+keywords:
+description:
+top:
+top_img:
+comments:
+toc:
+toc_number:
+toc_style_simple:
+copyright:
+copyright_author:
+copyright_author_href:
+copyright_url:
+copyright_info:
+mathjax:
+katex:
+aplayer:
+highlight_shrink:
+aside:
+ai:
+---
+
+## 前言
+
+缤纷云 S4（Smart Simple Storage Service）是一款兼容 S3 协议（S3 Compatible Storage）的对象存储服务。它在 S3 的基础上添加了一系列内置的 内容处理及优化功能。故相比 S3 多了 Smart 特性。项目地址：[https://www.bitiful.com/](https://www.bitiful.com/)
+
+目前可能是新出的原因，实名非常简单。然后不用绑定域名就可以使用，目前不用绑定域名也可以使用。
+
+免费对象储存50G，流量 10GB/月（每日每项限 5 GB） 对比国内其他几家免费对象储存空间和流量都要大。主要是目前没有备案域名也可以使用。不知道后期会不会跑路了。
+
+注册非常简单有手就行，我就不写教程了。
+
+![image-20241114153847612](https://bitiful.814925.xyz/2024/11/14/202411141642219.png)
+
+
+
+## 缤纷云配置
+
+添创建存储桶
+存储桶（Bucket）是用于存储对象（Object）的空间。在上传任意对象前，您需要先创建存储桶
+
+登录控制台
+创建对象存储 我们要做图床肯定要勾选公开桶
+
+
+![image-20241114151200653](https://bitiful.814925.xyz/2024/11/14/202411141642184.png)
+
+创建
+![image-20241114151230455](https://bitiful.814925.xyz/2024/11/14/202411141642166.png)
+
+创建子用户
+
+![image-20241114151246928](https://bitiful.814925.xyz/2024/11/14/202411141642141.png)添加子用户
+![image-20241114151305776](https://bitiful.814925.xyz/2024/11/14/202411141642171.png)
+
+**保存秘钥 Secret Key 只会显示一次，务必及时保存。注意保存key这里后面需要使用**
+
+设定权限
+
+![image-20241114151605324](https://bitiful.814925.xyz/2024/11/14/202411141642176.png)
+
+
+
+## 配置 picgo
+
+安装插件 s3
+
+![image-20241114151708986](https://bitiful.814925.xyz/2024/11/14/202411141642700.png)
+
+信息配置
+
+![image-20241114152904904](https://bitiful.814925.xyz/2024/11/14/202411141642785.png)
+
+### 文件路径可用占位符说明
+
+| payload       | 描述                   |
+| ------------- | ---------------------- |
+| {year}        | 当前日期 - 年          |
+| {month}       | 当前日期 - 月          |
+| {day}         | 当前日期 - 日          |
+| {fullName}    | 完整文件名（含扩展名） |
+| {fileName}    | 文件名（不含扩展名）   |
+| {extName}     | 扩展名（不含.）        |
+| {md5}         | 图片 MD5 计算值        |
+| {sha1}        | 图片 SHA1 计算值       |
+| {sha256}      | 图片 SHA256 计算值     |
+| {timestamp}   | Unix 时间戳            |
+| {timestampMS} | Unix 时间戳（毫秒）    |
+|               |                        |
+
+例如，如果我这里设置的上传路径为{year}/{month}/{day}/{fullName}，则图片将会按照日期存储在对应的文件夹中。
+
+显示效果就是年/月/日/202411141538715.png
+
+https:/xxxxxxxx/2024/11/14/202411141538715.png
+
+
+
+![image-20241114153046469](https://bitiful.814925.xyz/2024/11/14/202411141642737.png)
+
+
+
+自定义节点这里 填写的是：https://s3.bitiful.net 注意加https://
+
+![image-20241114153155336](https://bitiful.814925.xyz/2024/11/14/202411141642794.png)
+
+到这里就可以正常使用了，可以是去试试效果，上传一下图片。
+
+
+
+## 自定义域名
+
+在国内对象储存想绑定域名你懂的，肯定是需要完成备案。
+
+关于缤纷云证书上传和证书自动续期参考我前面写的文章
+
+例如我已经完成自定义域名绑定，自定义域名为https://bitiful.814925.xyz
+
+![image-20241125143508363](https://bitiful.814925.xyz/2024/11/25/202411251435532.png)
+
+
+
+这样我们通过picgo上传图片自动获取的链接就会变成
+
+https://bitiful.814925.xyz/2024/11/14/202411141538715.png
+
+**最新公告：因域名被过度滥用，现在存储桶的资源，点开默认是下载模式，而不是在浏览器中预览模式。如果要维持预览模式，则推荐启用CDN，或在存储桶中绑定自己的域名。**
+
