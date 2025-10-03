@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
-author: John Doe
-language: en
-timezone: ''
+title: 野猪佩奇弟弟 # 博客标题
+subtitle: "记录让幸福可以翻阅" # 子标题
+description: 本站以记录学习、积累经验、归纳知识、分享生活。相信你可以在这里找到对你有用的知识和教程。 # 博客简介
+keywords: 野猪佩奇弟弟 # 博客关键词
+author: 野猪佩奇弟弟 # 博主名称
+language: zh-CN # 语言
+timezone: Asia/Shanghai # 时区（请自行查询）
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -96,9 +96,26 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: solitude
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+
+algolia:
+  appId: "Z7A3XW4R2I"
+  apiKey: "12db1ad54372045549ef465881c17e743"
+  adminApiKey: "40321c7c207e7f73b63a19aa24c4761b"
+  chunkSize: 5000
+  indexName: "my-hexo-blog"
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink
+    - photos
+    - slug
+    - tags
+    - title
