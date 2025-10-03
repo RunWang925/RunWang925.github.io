@@ -35,6 +35,14 @@ jobs:
       - name: Generate Hexo static files
         run: hexo clean && hexo generate  # clean清除旧文件，generate生成新静态文件
 
+      # 新增步骤：自动更新Algolia搜索索引（核心！确保搜索数据与新内容同步）
+      - name: Update Algolia search index
+        run: hexo algolia  # 执行索引更新命令，将最新文章数据上传到Algolia
+        env:
+          # 从GitHub Secrets中读取Algolia管理员密钥（安全存储，避免明文暴露）
+          # 需提前在仓库 Settings → Secrets 中添加名为ALGOLIA_ADMIN_KEY的密钥
+          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+
       # 第五步：把生成的静态文件推送到gh-pages分支
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4  # 成熟的Action，专门用来推gh-pages
