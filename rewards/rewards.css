@@ -11,15 +11,8 @@
   --heo-main-op:var(--heo-theme-op);
   --heo-main-op-deep:var(--heo-theme-op-deep);
   --heo-main-none:var(--heo-theme-none);
-  --heo-shadow-theme:0 8px 12px -3px var(--heo-theme-op);
-  --heo-shadow-blackdeep:0 2px 16px -3px rgba(0, 0, 0, .15);
   --heo-shadow-main:0 8px 12px -3px var(--heo-main-op);
-  --heo-shadow-blue:0 8px 12px -3px rgba(40, 109, 234, .20);
-  --heo-shadow-white:0 8px 12px -3px rgba(255, 255, 255, .20);
-  --heo-shadow-black:0 0 12px 4px rgba(0, 0, 0, .05);
-  --heo-shadow-yellow:0px 38px 77px -26px rgba(255, 201, 62, .12);
-  --heo-shadow-red:0 8px 12px -3px #ee7d7936;
-  --heo-shadow-green:0 8px 12px -3px #87ee7936;
+  --heo-shadow-blackdeep:0 2px 16px -3px rgba(0, 0, 0, .15);
   --heo-logo-color:linear-gradient(215deg, #4584ff 0%, #cf0db9 100%);
   --heo-snackbar-time:5s;
   /* 主题色：粉色系 */
@@ -53,8 +46,6 @@
   --heo-card-bg:#fff;
   --heo-card-bg-op:var(--heo-black-op);
   --heo-card-bg-none:rgba(255, 255, 255, 0);
-  --heo-shadow-lightblack:0 5px 12px -5px rgba(102, 68, 68, 0.00);
-  --heo-shadow-light2black:0 5px 12px -5px rgba(102, 68, 68, 0.00);
   --heo-card-border:#e3e8f7;
   --heo-shadow-border:0 8px 16px -4px #2c2d300c;
   --style-border:1px solid var(--heo-card-border);
@@ -113,13 +104,6 @@ body{
   margin:0 16px 20px 16px;
   width:calc(100vw - 32px);
   justify-content:flex-start
-}
-.controls label[for="sortSelect"] {
-  width:0;
-  height:0;
-  margin:0;
-  padding:0;
-  overflow:hidden
 }
 #sortSelect{
   padding:8px 12px;
@@ -206,39 +190,9 @@ body{
   color:var(--heo-red)!important;
   font-weight:700
 }
-.reward-money-red.reward-item{
-  background-color:#fff;
-  position:relative
-}
-.reward-money-red.reward-item::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background-color:var(--heo-red);
-  opacity:.1;
-  pointer-events:none
-}
 .reward-money-orange{
   color:var(--heo-orange)!important;
   font-weight:700
-}
-.reward-money-orange.reward-item{
-  background-color:#fff;
-  position:relative
-}
-.reward-money-orange.reward-item::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background-color:var(--heo-orange);
-  opacity:.1;
-  pointer-events:none
 }
 .header{
   width:100%;
@@ -337,7 +291,7 @@ span.controls-text{
   max-width:800px;
   margin:20px auto;
   text-align:center;
-  font-size:14px; /* 基础大小，被内部类覆盖 */
+  font-size:14px;
   color:var(--heo-secondtext);
   background:var(--heo-card-bg);
   border:var(--style-border);
@@ -368,7 +322,7 @@ span.controls-text{
   letter-spacing:8px
 }
 
-/* 渐变背景（左右铺满，上下跟随内容） */
+/* 渐变背景 */
 .background-gradient{
   position: absolute;
   top: 0;
@@ -384,9 +338,7 @@ span.controls-text{
 }
 
 /* 仅rewards页面生效的样式 */
-body.rewards-page #st-footer {
-  display: none !important;
-}
+body.rewards-page #st-footer,
 body.rewards-page #footer_deal {
   display: none !important;
 }
