@@ -7,10 +7,12 @@ date: 2025-10-08 00:00:00
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>赞赏野猪佩奇弟弟的伙伴们 - RunRewards </title>
     <link rel="icon" href="/favicon.png" type="image/png">
-    <link rel="stylesheet" href="rewards.css" media="print" onload="this.media='all'">
+    <!-- 优化CSS加载：预加载并异步应用 -->
+    <link rel="preload" href="rewards.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="rewards.css"></noscript>
     <style>
         /* 隐藏顶部下滑标题 */
         #page-name {
@@ -45,27 +47,36 @@ date: 2025-10-08 00:00:00
 
     <header class="header">
         <span class="controls-text">感谢你赐予我前进的力量！</span>
-        <img class="guli_thanks" src="./img/guli_thanks.png" alt="" loading="lazy"> <!-- 移除描述文字 -->
+        <!-- 优化图片加载：支持WebP格式，兼容旧浏览器 -->
+        <picture>
+            <source srcset="./img/guli_thanks.webp" type="image/webp">
+            <img class="guli_thanks" src="./img/guli_thanks.png" alt="" loading="lazy">
+        </picture>
     </header>
 
     <main>
         <div class="qrcode">
             <div class="qrcode-item">
                 <a href="./img/wechat.jpg" target="_blank" rel="noopener noreferrer">
-                    <img src="./img/wechat.jpg" alt="" width="150" height="150" loading="lazy"> <!-- 移除描述文字 -->
+                    <picture>
+                        <source srcset="./img/wechat.webp" type="image/webp">
+                        <img src="./img/wechat.jpg" alt="" width="150" height="150" loading="lazy">
+                    </picture>
                 </a>
                 <div class="qrcode-text">微信扫一扫</div>
             </div>
             <div class="qrcode-item">
                 <a href="./img/alipay.jpg" target="_blank" rel="noopener noreferrer">
-                    <img src="./img/alipay.jpg" alt="" width="150" height="150" loading="lazy"> <!-- 移除描述文字 -->
+                    <picture>
+                        <source srcset="./img/alipay.webp" type="image/webp">
+                        <img src="./img/alipay.jpg" alt="" width="150" height="150" loading="lazy">
+                    </picture>
                 </a>
                 <div class="qrcode-text">支付宝扫一扫</div>
             </div>
         </div>
 
         <div class="controls">
-            <label for="sortSelect"></label>
             <select id="sortSelect">
                 <option value="date">按日期排序</option>
                 <option value="money">按金额排序</option>
