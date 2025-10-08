@@ -1,0 +1,96 @@
+---
+title: "RunRewards - 赞赏野猪佩奇弟弟的伙伴们"
+date: 2025-10-08 00:00:00
+---
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赞赏野猪佩奇弟弟的伙伴们 - RunRewards </title>
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="stylesheet" href="rewards.css" media="print" onload="this.media='all'">
+    <style>
+        /* 隐藏顶部下滑标题 */
+        #page-name {
+            display: none !important;
+        }
+        /* 调整底部提示文字大小 */
+        .btm-tips-text {
+            font-size: 13px !important;
+            margin: 6px 0 !important;
+        }
+        /* 版权信息：比上方文字更小 */
+        .btm-tips-copyright {
+            font-size: 11px !important;
+            text-align: right !important;
+            color: var(--heo-secondtext);
+            margin: 8px 0 0 0 !important;
+            display: block;
+        }
+        /* 张洪Heo链接样式 */
+        .copyright-link {
+            color: var(--heo-main);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .copyright-link:hover {
+            color: var(--heo-theme-op-deep);
+        }
+    </style>
+</head>
+<body class="rewards-page">
+    <div class="background-gradient"></div>
+
+    <header class="header">
+        <span class="controls-text">感谢你赐予我前进的力量！</span>
+        <img class="guli_thanks" src="./img/guli_thanks.png" alt="" loading="lazy"> <!-- 移除描述文字 -->
+    </header>
+
+    <main>
+        <div class="qrcode">
+            <div class="qrcode-item">
+                <a href="./img/wechat.jpg" target="_blank" rel="noopener noreferrer">
+                    <img src="./img/wechat.jpg" alt="" width="150" height="150" loading="lazy"> <!-- 移除描述文字 -->
+                </a>
+                <div class="qrcode-text">微信扫一扫</div>
+            </div>
+            <div class="qrcode-item">
+                <a href="./img/alipay.jpg" target="_blank" rel="noopener noreferrer">
+                    <img src="./img/alipay.jpg" alt="" width="150" height="150" loading="lazy"> <!-- 移除描述文字 -->
+                </a>
+                <div class="qrcode-text">支付宝扫一扫</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <label for="sortSelect"></label>
+            <select id="sortSelect">
+                <option value="date">按日期排序</option>
+                <option value="money">按金额排序</option>
+            </select>
+            <span class="controls-tips">感谢你们支持野猪佩奇弟弟博客以及项目的发展</span>
+        </div>
+
+        <div class="reward-list" id="rewardList"></div>
+
+        <div class="pagination">
+            <button id="firstPage" aria-label="前往首页">首页</button>
+            <button id="prevPage" aria-label="前往上一页">上一页</button>
+            <span id="currentPage">第1页</span>
+            <button id="nextPage" aria-label="前往下一页">下一页</button>
+            <button id="lastPage" aria-label="前往尾页">尾页</button>
+        </div>
+
+        <div class="btm-tips">
+            <p class="btm-tips-text">如需修改昵称信息，您可以将赞赏截图、转账/支付单号及修改后的昵称发送至：runpeiqi@qq.com</p>
+            <p class="btm-tips-text">仅展示 ¥1 以上的赞赏，如需展示在博客发电位，请在赞赏时留言地址</p>
+            <p class="btm-tips-copyright">© 页面版权归<a href="https://zhheo.com/" target="_blank" rel="noopener noreferrer" class="copyright-link">张洪Heo</a>所有，侵权请联系删除</p>
+        </div>
+    </main>
+
+    <footer class="footer"></footer>
+    <script src="rewards.js" defer></script>
+</body>
+</html>

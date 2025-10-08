@@ -278,16 +278,20 @@ post:
   # Reward
   # 打赏
   award:
-    enable: false
+    enable: true
     appreciators: /about/ # Reward page
     # Reward Title
     # 打赏标题
-    title: # Thanks for your appreciation. / 感谢您的赞赏
-    desc: # Because of your support, I realize the value of writing articles. / 由于您的支持，我才能够实现写作的价值。
+    title:  感谢您的赞赏
+    desc:  因为你们的支持让我意识到写文章的价值
     # Reward list
     # 打赏列表
     list:
-       - name: Github Sponsor
+       - name: 微信
+         qcode: https://s3.qjqq.cn/47/661ba900c4bc1.webp!color
+         url: https://github.com/sponsors/everfu
+         color: var(--efu-black)
+       - name: 支付宝
          qcode: https://s3.qjqq.cn/47/661ba900c4bc1.webp!color
          url: https://github.com/sponsors/everfu
          color: var(--efu-black)
@@ -522,10 +526,15 @@ footer:
       Douyin: https://v.douyin.com/iJsLc8jt/ || fab fa-tiktok
   # 友情链接
   group:
+    服务:
+      又拍云: /archives/
+      测试1: /categories/
+      测试2: /tags/
     导航:
       归档: /archives/
       分类: /categories/
       标签: /tags/
+      打赏: /rewards/
     协议:
       隐私协议: /privacy/
       Cookies: /cookies/
@@ -533,6 +542,7 @@ footer:
     鸣谢:
       大佬1: /cookies/
       大佬2: /privacy/
+      大佬3: /privacy/
   # 随机友链
   randomlink: true  # 随机友链
 
@@ -548,17 +558,19 @@ footer:
 
   # 页脚信息文字
   links:
+    - name: 打赏
+      url: /rewards/
     - name: 订阅
       url: /atom.xml
     - name: License
-      url: https://github.com/everfu/hexo-theme-solitude/blob/main/LICENSE
+      url: /copyright/
       icon:
         - fas fa-copyright
         - fab fa-creative-commons-by
         - fab fa-creative-commons-nc
         - fab fa-creative-commons-nd
     - name: 关于
-      url: /about/ || fas fa-user
+      url: /about/
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
