@@ -322,19 +322,26 @@ span.controls-text{
   letter-spacing:8px
 }
 
-/* 渐变背景 */
+/* 渐变背景修复：限制高度并固定定位 */
 .background-gradient{
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100vw !important;
-  height: 100% !important;
+  height: 1200px !important; /* 仅覆盖到二维码区域 */
   background-image:linear-gradient(0deg,#ffc0cb00 50%,#ff69b4 100%);
   z-index: -2;
   pointer-events: none;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* 数据区域背景覆盖渐变 */
+.reward-list, .pagination, .btm-tips {
+  background-color: var(--heo-background);
+  position: relative;
+  z-index: 1; /* 确保在渐变上方 */
 }
 
 /* 仅rewards页面生效的样式 */
