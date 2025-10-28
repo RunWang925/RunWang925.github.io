@@ -1,8 +1,14 @@
-// 全局变量：当前页码、当前排序方式、本地数据
+// 全局配置与变量
 let currentPage = 1;
 let currentSort = 'date'; // 默认为按日期排序
-const pageSize = 5; // 每页显示5条数据
+const pageSize = 20; // 每页显示20条数据
 let rewardData = []; // 存储本地数据
+
+// 数据来源与缓存配置（集中在顶部）
+const useApi = true; // 切换数据来源 (true: API, false: 本地JSON)
+const apiUrl = 'https://rewards.zoerun.qzz.io/api/rewards'; // API地址
+const cacheExpiry = 300000; // 缓存5分钟（5*60*1000毫秒）
+const cacheKey = 'rewardDataCache'; // 缓存键名
 
 // 格式化日期显示（统一显示为 月-日 或 年-月-日）
 function formatDate(dateStr) {
@@ -26,7 +32,7 @@ function getTotalPages() {
   return Math.ceil(rewardData.length / pageSize);
 }
 
-// 渲染打赏列表（基于当前页和排序方式，使用DocumentFragment优化DOM操作）
+// 渲染打赏列表
 function renderRewardList() {
   const rewardList = document.getElementById('rewardList');
   if (!rewardList) return;
@@ -34,22 +40,20 @@ function renderRewardList() {
   // 1. 排序数据
   const sortedData = [...rewardData].sort((a, b) => {
     if (currentSort === 'date') {
-      // 按日期排序（新的在前）
-      return new Date(b.date) - new Date(a.date);
+      return new Date(b.date) - new Date(a.date); // 新的在前
     } else {
-      // 按金额排序（大的在前）
-      return b.money - a.money;
+      return b.money - a.money; // 大的在前
     }
   });
 
-  // 2. 分页处理（截取当前页数据）
+  // 2. 分页处理
   const startIndex = (currentPage - 1) * pageSize;
   const currentPageData = sortedData.slice(startIndex, startIndex + pageSize);
 
-  // 3. 使用文档片段批量处理DOM，减少重绘重排
+  // 3. 渲染DOM
   const fragment = document.createDocumentFragment();
 
-  // 渲染表头
+  // 表头
   const headerDiv = document.createElement('div');
   headerDiv.className = 'reward-header';
   headerDiv.innerHTML = `
@@ -59,7 +63,7 @@ function renderRewardList() {
   `;
   fragment.appendChild(headerDiv);
 
-  // 渲染列表项
+  // 列表项
   if (currentPageData.length > 0) {
     currentPageData.forEach((item, index) => {
       const moneyClass = getMoneyColorClass(item.money);
@@ -79,10 +83,9 @@ function renderRewardList() {
     fragment.appendChild(emptyDiv);
   }
 
-  // 一次性更新DOM
   rewardList.innerHTML = '';
   rewardList.appendChild(fragment);
-  updatePagination(); // 更新分页按钮状态
+  updatePagination();
 }
 
 // 更新分页显示
@@ -100,83 +103,76 @@ function updatePagination() {
   document.getElementById('lastPage').disabled = currentPage >= totalPages;
 }
 
-// 初始化事件（排序和分页按钮）
+// 初始化事件
 function initEvents() {
   // 排序下拉框
   document.getElementById('sortSelect').addEventListener('change', (e) => {
     currentSort = e.target.value;
-    currentPage = 1; // 排序改变时重置到第一页
+    currentPage = 1;
     renderRewardList();
   });
 
-  // 分页按钮（使用事件委托优化，减少监听数量）
+  // 分页按钮
   const pagination = document.querySelector('.pagination');
   pagination.addEventListener('click', (e) => {
     const totalPages = getTotalPages();
     switch(e.target.id) {
       case 'firstPage':
-        if (currentPage !== 1) {
-          currentPage = 1;
-          renderRewardList();
-        }
+        if (currentPage !== 1) currentPage = 1;
         break;
       case 'prevPage':
-        if (currentPage > 1) {
-          currentPage--;
-          renderRewardList();
-        }
+        if (currentPage > 1) currentPage--;
         break;
       case 'nextPage':
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderRewardList();
-        }
+        if (currentPage < totalPages) currentPage++;
         break;
       case 'lastPage':
-        if (currentPage !== totalPages) {
-          currentPage = totalPages;
-          renderRewardList();
-        }
+        if (currentPage !== totalPages) currentPage = totalPages;
         break;
     }
+    renderRewardList();
   });
 }
 
-// 读取本地JSON数据（添加localStorage缓存，减少重复请求）
-function loadLocalData() {
+// 处理数据加载成功
+function handleDataLoaded(data) {
+  rewardData = data.data || [];
+  renderRewardList();
+  
+  // 存入缓存
+  localStorage.setItem(cacheKey, JSON.stringify({
+    data,
+    timestamp: Date.now()
+  }));
+}
+
+// 读取数据
+function loadData() {
   const rewardList = document.getElementById('rewardList');
   if (rewardList) {
-    rewardList.innerHTML = '<div class="reward-item loading">加载中...</div>'; // 显示加载状态
+    rewardList.innerHTML = '<div class="reward-item loading">加载中...</div>';
   }
-
-  const cacheKey = 'rewardDataCache';
-  const cacheExpiry = 3600000; // 缓存1小时
 
   // 尝试读取缓存
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     const { data, timestamp } = JSON.parse(cached);
     if (Date.now() - timestamp < cacheExpiry) {
-      rewardData = data;
-      renderRewardList();
+      handleDataLoaded(data);
       return;
     }
   }
 
-  // 缓存失效或无缓存时请求
-  fetch('./rewards-data.json')
+  // 缓存失效时请求数据
+  const url = useApi ? apiUrl : './rewards-data.json';
+  
+  fetch(url)
     .then(response => {
-      if (!response.ok) throw new Error('数据文件未找到');
+      if (!response.ok) throw new Error('数据加载失败');
       return response.json();
     })
     .then(data => {
-      rewardData = data;
-      // 存入缓存
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      renderRewardList();
+      handleDataLoaded(data);
     })
     .catch(error => {
       console.error('加载数据失败:', error);
@@ -188,6 +184,6 @@ function loadLocalData() {
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
-  initEvents(); // 绑定事件
-  loadLocalData(); // 加载本地数据
+  initEvents();
+  loadData();
 });

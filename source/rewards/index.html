@@ -9,21 +9,33 @@ date: 2025-10-08 00:00:00
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>赞赏野猪佩奇弟弟的伙伴们 - RunRewards </title>
-    <link rel="icon" href="/favicon.png" type="image/png">
-    <!-- 优化CSS加载：预加载并异步应用 -->
+    
+    <!-- ============================================== -->
+    <!-- 图片地址配置（移到最顶部，方便修改！一次修改全页生效） -->
+    <!-- ============================================== -->
+    <script>
+        const rewardImgs = {
+            // 顶部感谢图（guli_thanks.png）
+            guliThanks: "https://upyun.814925.xyz/hexoblog/rewards/guli_thanks.png",
+            // 微信赞赏二维码（wechat.jpg）
+            wechatQrcode: "https://upyun.814925.xyz/hexoblog/rewards/wechat.jpg",
+            // 支付宝赞赏二维码（alipay.jpg）
+            alipayQrcode: "https://upyun.814925.xyz/hexoblog/rewards/alipay.jpg"
+        };
+    </script>
+
+    <!-- 保留原CSS加载逻辑 -->
     <link rel="preload" href="rewards.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="rewards.css"></noscript>
     <style>
-        /* 隐藏顶部下滑标题 */
+        /* 原有样式（无改动） */
         #page-name {
             display: none !important;
         }
-        /* 调整底部提示文字大小 */
         .btm-tips-text {
             font-size: 13px !important;
             margin: 6px 0 !important;
         }
-        /* 版权信息：比上方文字更小 */
         .btm-tips-copyright {
             font-size: 11px !important;
             text-align: right !important;
@@ -31,7 +43,6 @@ date: 2025-10-08 00:00:00
             margin: 8px 0 0 0 !important;
             display: block;
         }
-        /* 张洪Heo链接样式 */
         .copyright-link {
             color: var(--heo-main);
             text-decoration: none;
@@ -47,30 +58,23 @@ date: 2025-10-08 00:00:00
 
     <header class="header">
         <span class="controls-text">感谢你赐予我前进的力量！</span>
-        <!-- 优化图片加载：支持WebP格式，兼容旧浏览器 -->
-        <picture>
-            <source srcset="./img/guli_thanks.webp" type="image/webp">
-            <img class="guli_thanks" src="./img/guli_thanks.png" alt="" loading="lazy">
-        </picture>
+        <!-- 顶部感谢图：通过id关联JS变量 -->
+        <img id="guliThanksImg" class="guli_thanks" loading="lazy">
     </header>
 
     <main>
         <div class="qrcode">
             <div class="qrcode-item">
-                <a href="./img/wechat.jpg" target="_blank" rel="noopener noreferrer">
-                    <picture>
-                        <source srcset="./img/wechat.webp" type="image/webp">
-                        <img src="./img/wechat.jpg" alt="" width="150" height="150" loading="lazy">
-                    </picture>
+                <!-- 微信二维码：id关联JS变量 -->
+                <a id="wechatQrcodeLink" target="_blank" rel="noopener noreferrer">
+                    <img id="wechatQrcodeImg" width="150" height="150" loading="lazy">
                 </a>
                 <div class="qrcode-text">微信扫一扫</div>
             </div>
             <div class="qrcode-item">
-                <a href="./img/alipay.jpg" target="_blank" rel="noopener noreferrer">
-                    <picture>
-                        <source srcset="./img/alipay.webp" type="image/webp">
-                        <img src="./img/alipay.jpg" alt="" width="150" height="150" loading="lazy">
-                    </picture>
+                <!-- 支付宝二维码：id关联JS变量 -->
+                <a id="alipayQrcodeLink" target="_blank" rel="noopener noreferrer">
+                    <img id="alipayQrcodeImg" width="150" height="150" loading="lazy">
                 </a>
                 <div class="qrcode-text">支付宝扫一扫</div>
             </div>
@@ -97,9 +101,25 @@ date: 2025-10-08 00:00:00
         <div class="btm-tips">
             <p class="btm-tips-text">如需修改昵称信息，您可以将赞赏截图、转账/支付单号及修改后的昵称发送至：runpeiqi@qq.com</p>
             <p class="btm-tips-text">仅展示 ¥1 以上的赞赏，如需展示在博客发电位，请在赞赏时留言地址</p>
-            <p class="btm-tips-copyright">© 页面版权归<a href="https://zhheo.com/" target="_blank" rel="noopener noreferrer" class="copyright-link">张洪Heo</a>所有，侵权请联系删除</p>
+            <p class="btm-tips-copyright">
+  © 数据接口 <a href="https://rewards.zoerun.qzz.io" target="_blank" rel="noopener noreferrer">Rewards 独立项目</a>
+</p>
         </div>
     </main>
+
+    <!-- 页面加载后，用JS给图片赋值（无需修改这里，除非改id） -->
+    <script>
+        window.onload = function() {
+            // 顶部感谢图赋值
+            document.getElementById("guliThanksImg").src = rewardImgs.guliThanks;
+            // 微信二维码赋值（img src + a href）
+            document.getElementById("wechatQrcodeImg").src = rewardImgs.wechatQrcode;
+            document.getElementById("wechatQrcodeLink").href = rewardImgs.wechatQrcode;
+            // 支付宝二维码赋值（img src + a href）
+            document.getElementById("alipayQrcodeImg").src = rewardImgs.alipayQrcode;
+            document.getElementById("alipayQrcodeLink").href = rewardImgs.alipayQrcode;
+        };
+    </script>
 
     <footer class="footer"></footer>
     <script src="rewards.js" defer></script>

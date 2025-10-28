@@ -14,7 +14,7 @@ timezone: Asia/Shanghai # 时区（请自行查询）
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://runwang925.github.io
-permalink: :year/:month/:day/:title/
+permalink: posts/:abbrlink/
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -119,3 +119,10 @@ algolia:
     - slug
     - tags
     - title
+
+# abbrlink 配置
+abbrlink:
+  alg: crc32  # 算法：crc16/32（默认）、md5（更长）
+  rep: hex    # 输出格式：dec（十进制）、hex（十六进制，默认）
+  # 可选：是否在文章 Front-matter 中显示 abbrlink 值（方便查看）
+  show_link: true

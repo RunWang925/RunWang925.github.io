@@ -194,13 +194,6 @@ award:
   description: 感谢赞赏的人，因为你们，让我感受到写博客这件事情能够给你们创造了价值。这会让我在这条路上走得更远。
   tips: 总金额：¥ {sum}，将全部用于博客的维护和更新。 # 必须带 {sum}，否则无法显示总金额
 rewardList: # 底部捐赠
-  - name: "❖星港◎Star☆"
-    money: 100
+  - name: 赞赏数据加载中
+    money: 0
     time: 2025-01-01
-    icon: fab fa-weixin
-    color: "#09bb07"
-  - name: "沫塔尔猫"
-    money: 100
-    time: 2025-01-01
-    icon: fab fa-alipay
-    color: "#1677FF"

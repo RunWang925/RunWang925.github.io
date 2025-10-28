@@ -1,39 +1,26 @@
 ---
 title: 缤纷云bitiful对象储存配合Picgo免费图床
 cover: 'https://bitiful.814925.xyz/2024/11/25/202411251521793.webp'
-swiper_index: 10
-top_group_index: 10
-background: '#fff'
-tags:
-  - 图床
-  - 白嫖
 categories:
-  - 教程
+  - 网站建设
+tags:
+  - 对象储存
 abbrlink: f5b7655d
-date: 2024-11-08 16:25:49
-updated:
-keywords:
-description:
-top:
-top_img:
-comments:
-toc:
-toc_number:
-toc_style_simple:
-copyright:
-copyright_author:
-copyright_author_href:
-copyright_url:
-copyright_info:
-mathjax:
+date: 2025-10-25 16:49:49
+type:
+comment:
+ai_text:
+recommend:
 katex:
-aplayer:
-highlight_shrink:
-aside:
-ai:
+reprint:
+locate:
 ---
 
+
 ## 前言
+
+文章中图片都上传到了缤纷云也可以体验对比一下速度，
+picgo现在没有用了 现在使用PicList，我感觉界面更加好看一些哈哈
 
 缤纷云 S4（Smart Simple Storage Service）是一款兼容 S3 协议（S3 Compatible Storage）的对象存储服务。它在 S3 的基础上添加了一系列内置的 内容处理及优化功能。故相比 S3 多了 Smart 特性。项目地址：[https://www.bitiful.com/](https://www.bitiful.com/)
 
@@ -139,3 +126,4 @@ https://bitiful.814925.xyz/2024/11/14/202411141538715.png
 
 **最新公告：因域名被过度滥用，现在存储桶的资源，点开默认是下载模式，而不是在浏览器中预览模式。如果要维持预览模式，则推荐启用CDN，或在存储桶中绑定自己的域名。**
 
+不知道是我操作问题还是怎么，最近莫名被扣了几分钱导致无法访问，然后我充值了10元（最低充值）然后才恢复正常了

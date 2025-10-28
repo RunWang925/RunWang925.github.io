@@ -9,7 +9,7 @@ tags:
   - 腾讯云EdgeonePages
   - Cloudflare
 categories:
-  - 教程
+  - 分享
 abbrlink: 7a176405
 date: 2024-11-14 16:25:49
 updated:
