@@ -69,12 +69,17 @@ nav:
 hometop:
   enable: true
   banner:
-    title: 分享技术<br >与科技生活 # 大字
+    title: 
+      - 接纳岁月沉淀<br >稳步向阳成长 # 大字
     desc:
-      一个热爱生活的人 # 小字
-      # - 我只是一个普通的程序员
-      # - 但我有一个不平凡的梦想
-      # - 我希望能够改变世界
+      - 代码敲得慢，热爱不打烊 # 小字
+      - 技术半吊子，梦想超执着
+      - 职场小透明，生活追光者
+      - 编程菜鸡，快乐第一
+      - 技术小白，梦想不小
+      - 日常敲 bug，依旧爱生活
+      - 啥也不精通，热爱最管用
+
     icon:
       HTML: # name
         img: https://i.postimg.cc/vBWVnY8q/html.png # url
@@ -95,13 +100,17 @@ hometop:
         img: https://i.postimg.cc/nhgjwjCS/git.png
         color: "#df5b40"
   group:
-     热门: /tags/Fire/ || fas fa-fire || linear-gradient(to right,#f65,#ffbf37)
+     #热门: /tags/Fire/ || fas fa-fire || linear-gradient(to right,#f65,#ffbf37)
+     订阅: /tags/Subscribe/ || fas fa-bell || linear-gradient(to right,#ff4081,#f50057) #粉色渐变，铃铛图标强化订阅互动性
+     主题: /tags/Theme/ || fas fa-palette || linear-gradient(to right,#ab47bc,#ba68c8) #紫色渐变，调色盘图标契合主题设计
+     教程: /tags/Tutorial/ || fas fa-laptop-code || linear-gradient(to right,#26c6da,#00acc1) #青蓝渐变，代码图标突出教程技术属性
+     打赏: /donate/ || fas fa fa-heart || linear-gradient(to right,#ec407a,#f06292) #粉红渐变，爱心图标传递感谢与互动感
   recommendList:
     enable: true
-    sup: 置顶 #通过在文章的 Front Matter 中配置 recommend: true，可以在首页顶部显示推荐列表。
-    title: Solitude 官方文档
-    url: https://solitude.js.org/
-    img: /img/default.avif
+    sup: 主页 #通过在文章的 Front Matter 中配置 recommend: true，可以在首页顶部显示推荐列表。
+    title: 🐗Peggy Bro🐽
+    url: https://814925.xyz/
+    img: /img/Peggy-Bro-Harbor-logo.png
     color: "none"
 # --------------------------- end ---------------------------
 
@@ -527,9 +536,12 @@ footer:
   # 友情链接
   group:
     服务:
-      又拍云: /archives/
-      测试1: /categories/
-      测试2: /tags/
+      EdgeOne: https://console.cloud.tencent.com/edgeone/
+      Cloudflare: https://dash.cloudflare.com/
+      华为云DNS: https://console.huaweicloud.com/dns/
+      多吉云CDN: https://console.dogecloud.com/cdn/
+      又拍云: https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral/
+
     导航:
       归档: /archives/
       分类: /categories/
@@ -540,9 +552,13 @@ footer:
       Cookies: /cookies/
       版权协议: /copyright/
     鸣谢:
-      大佬1: /cookies/
-      大佬2: /privacy/
-      大佬3: /privacy/
+      清羽飞扬: https://blog.liushen.fun/
+      青桔气球: https://blog.qjqq.cn/
+      周润发: https://blog.zrf.me/
+      梦爱吃鱼: https://blog.bsgun.cn/ 
+      鹊楠 : https://blog.quenan.cn/
+
+
   # 随机友链
   randomlink: true  # 随机友链
 
@@ -571,6 +587,7 @@ footer:
         - fab fa-creative-commons-nd
     - name: 关于
       url: /about/
+
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
@@ -782,21 +799,21 @@ pwa:
 comment:
   # Which commenting system to use(e.g. waline or waline,twikoo)
   # 使用哪个评论系统（例如： waline or waline,twikoo）
-  use: # waline, twikoo, valine, artalk, giscus # Up to two comment systems can be turned on at the same time
+  use: twikoo # waline, twikoo, valine, artalk, giscus # Up to two comment systems can be turned on at the same time
   # Whether to display the hot comment switch.
   # 是否显示热门评论开关
   commentBarrage: false
   # Lazy load
   # 懒加载评论区
-  lazyload: false
+  lazyload: true
   # Whether to display the comment count
   # 显示评论数
-  count: false
+  count: true
   # Sidebar displays the total number of comments
   # Sidebar 显示总评论数
-  sidebar: false
+  sidebar: true
   # PV
-  pv: false
+  pv: true
   # Avatar
   avatar: https://gravatar.com/avatar
   # Hot comment tips
@@ -813,16 +830,21 @@ comment:
     limit: 5 # 评论数 / Number of comments
 # Twikoo: https://solitude.js.org/configuration/comment/twikoo
 twikoo: # https://twikoo.js.org/
-  envId: # url: https://twikoo.sondy.top/
+  envId: https://twikoo.814925.xyz/.netlify/functions/twikoo # url: https://twikoo.sondy.top/
   region: # Environment locale, default is ap-shanghai, Tencent cloud environment fill ap-shanghai or ap-guangzhou; Vercel environment do not fill the.
   style: true # Use custom styles when turned on
   accessToken: # AccessToken
   option: # twikoo option
 # Waline: https://solitude.js.org/configuration/comment/waline
 waline: # https://waline.js.org/
-  envId: # url: https://waline.wzsco.top
-  pageview: false # Whether to enable page access statistics
-  option: # waline configuration item
+  envId: https://waline.zoerun.qzz.io # 你的 Waline 服务端地址（已正确填写）
+  pageview: true # 启用浏览量统计
+  option: # Waline 基础功能配置
+    markdown: true # 支持 Markdown 评论
+    emoji: true # 显示表情包
+    requiredMeta: ['nick', 'mail'] # 评论必填：昵称+邮箱
+    placeholder: "来说说你的看法吧～" # 评论框提示文字
+    pageSize: 10 # 每页显示10条评论
 # Valine: https://solitude.js.org/configuration/comment/valine
 valine:
   appId: # leancloud application app id
