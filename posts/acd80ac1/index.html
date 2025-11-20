@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>给博客封面 “加点料”：自定义 CoverView 封面生成工具 | 野猪佩奇弟弟</title><noscript>开启JavaScript才能访问本站哦~</noscript><link rel="icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?v=3.0.21"><link rel="canonical" href="https://runwang925.github.io/posts/acd80ac1/index.html"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css"><!-- Feature-specific CSS--><!-- aplayer--><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="给博客封面 “加点料”：自定义 CoverView 封面生成工具 最初被 清羽飞扬大佬分享的 CoverView 项目 吸引，它的界面风格简约大气，很适合技术博客的调性。但美中不足的是，这个版本缺少本地图片上传功能—— 询问后得知是因无需求所以没有写。。。。。 在文章中推荐了另外一个"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="野猪佩奇弟弟"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="/img/favicon.ico"><link rel="apple-touch-icon" href="/img/favicon.ico" sizes="180x180"><script>console.log(' %c Solitude %c ' + '3.0.21' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+            },
+            diffDateFormat: (selector) => {
+                selector.forEach(item => {
+                    const date = new Date(item.getAttribute('datetime') || item.textContent);
+                    item.textContent = (date.getMonth() + 1).toString()+'/'+date.getDate().toString();
+                });
+            },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: {"appId":"309DUJATH7","apiKey":"c4c57e5c5309f40baa32690a524326a3","indexName":"hexopeiqi","hits":{"per_page":10}},
+    localsearch: undefined,
+    runtime: '2023-04-20 00:00:00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: true,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"复制成功","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请遵循GPL协议。","totalk":"无需删除空行，直接输入评论即可","search":{"empty":"找不到你查询的内容：${query}","hit":"找到 ${hits} 条结果，用时 ${time} 毫秒","placeholder":"输入关键词快速查找","count":"共 <b>${count}</b> 条结果。","loading":"搜索中..."}},
+    aside: {
+        state: {
+            morning: "✨ 早上好，新的一天开始了",
+            noon: "🍲 午餐时间",
+            afternoon: "🌞 下午好",
+            night: "早点休息",
+            goodnight: "晚安 😴",
+        },
+        witty_words: ["你可以的","你一定可以的","祝你好运，陌生人"],
+        witty_comment: {
+            prefix: '好久不见，',
+            back: '欢迎再次回来，',
+        },
+    },
+    covercolor: {
+        enable: true
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 8.0.0"><link rel="alternate" href="/atom.xml" title="野猪佩奇弟弟" type="application/atom+xml">
+</head><body id="body"><div><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fas fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/hexo/">hexo<sup>2</sup></a><a href="/tags/solitude/">solitude<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9/">主题修改<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>3</sup></a><a href="/tags/Cloudflare/">Cloudflare<sup>3</sup></a><a href="/tags/CloudFlare-ImgBed/">CloudFlare-ImgBed<sup>2</sup></a><a href="/tags/CDN/">CDN<sup>1</sup></a><a href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/">腾讯云EdgeonePages<sup>2</sup></a><a href="/tags/%E5%B0%81%E9%9D%A2/">封面<sup>1</sup></a><a href="/tags/%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98/">对象储存<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="item"><a href="/archives/2025/11/"><span class="date">2025/11</span><div class="count-group"><span class="count">1</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2025/10/"><span class="date">2025/10</span><div class="count-group"><span class="count">4</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2024/11/"><span class="date">2024/11</span><div class="count-group"><span class="count">2</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/"><span class="date">全部文章</span><div class="count-group"><span class="count">7</span><span class="unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fas fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div></div><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/recentcomments/"><div class="headline">评论</div><div class="length-num" id="waline_allcount"><i class="solitude fas fa-spinner fa-spin"></i></div><script pjax="pjax">(async () => {
+  await fetch('https://waline.814925.xyz/api/comment?type=count', {method: 'GET'}).then(async res => res.json())
+    .then(async data => {
+      document.querySelector('#waline_allcount').innerHTML = data.data
+    })
+})()</script></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fas fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">project</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" title="Solitude"><img class="nolazyload back-menu-item-icon" src="/img/pwa/favicon.png" alt="Solitude"><span class="back-menu-item-text">Solitude</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>文章列表</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>友链</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>我的</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-user"></i><span>关于本站</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="card-tag-cloud"><a href="/tags/hexo/">hexo<sup>2</sup></a><a href="/tags/solitude/">solitude<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9/">主题修改<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>3</sup></a><a href="/tags/Cloudflare/">Cloudflare<sup>3</sup></a><a href="/tags/CloudFlare-ImgBed/">CloudFlare-ImgBed<sup>2</sup></a><a href="/tags/CDN/">CDN<sup>1</sup></a><a href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/">腾讯云EdgeonePages<sup>2</sup></a><a href="/tags/%E5%B0%81%E9%9D%A2/">封面<sup>1</sup></a><a href="/tags/%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98/">对象储存<sup>1</sup></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">project</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" title="Solitude"><img class="nolazyload back-menu-item-icon" src="/img/pwa/favicon.png" alt="Solitude"><span class="back-menu-item-text">Solitude</span></a></div></div></div></div><a href="/" title="返回博客主页" id="site-name"><span class="title">野猪佩奇弟弟</span><i class="solitude fas fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">给博客封面 “加点料”：自定义 CoverView 封面生成工具</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>文章列表</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>友链</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>我的</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-user"></i><span>关于本站</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索"><i class="solitude fas fa-magnifying-glass"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fas fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fas fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="https://i.p-i.vip/133/20251120-691ebf73edfde.png" alt="给博客封面 “加点料”：自定义 CoverView 封面生成工具"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/">网站建设</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>腾讯云EdgeonePages</span></a><a class="post-meta__tags" href="/tags/%E5%B0%81%E9%9D%A2/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>封面</span></a></div></div></div></div><h1 class="post-title">给博客封面 “加点料”：自定义 CoverView 封面生成工具</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2025-11-20 15:55:15"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2025-11-20T07:55:15.382Z">2025-11-20T07:55:15.382Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fas fa-file-word" title="文章字数"></i><span class="word-count">1.1k</span><span class="post-meta-separator"></span></span><span class="post-meta-commentcount" title="评论数" onclick="sco.scrollTo('post-comment')"><i class="solitude fas fa-comment"></i><a href="/posts/acd80ac1/#post-comment"><span class="waline-comment-count"><i class="solitude fas fa-spinner fa-spin"></i></span></a></span></div></div></div><div class="post-radius-bottom"></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h1 id="给博客封面-“加点料”：自定义-CoverView-封面生成工具"><a href="#给博客封面-“加点料”：自定义-CoverView-封面生成工具" class="headerlink" title="给博客封面 “加点料”：自定义 CoverView 封面生成工具"></a>给博客封面 “加点料”：自定义 CoverView 封面生成工具</h1><p>  最初被 <a target="_blank" rel="noopener" href="https://blog.liushen.fun/posts/cb179d4/">清羽飞扬大佬分享的 CoverView 项目</a> 吸引，它的界面风格简约大气，很适合技术博客的调性。但美中不足的是，这个版本<strong>缺少本地图片上传功能</strong>—— 询问后得知是因无需求所以没有写。。。。。</p>
+<p>   <img src="https://i.p-i.vip/133/20251119-691d3489812d0.png" alt="1763521665120.png"></p>
+<p>   在文章中推荐了另外一个汉化分支 <a target="_blank" rel="noopener" href="https://github.com/Lruihao/CoverView">Lruihao 汉化分支</a>，它保留了本地图片上传功能，虽然我更加喜欢大佬的这个风格，但是我不会改上传。。。。</p>
+<h2 id="🔥改造思路：抄出个性化"><a href="#🔥改造思路：抄出个性化" class="headerlink" title="🔥改造思路：抄出个性化"></a>🔥改造思路：抄出个性化</h2><p>我的目标很明确：<strong>保留的优雅样式，同时加入本地图片上传功能</strong><br>不会写还不会抄吗，很多代码我都不敢删除，只能注释掉我发现我既然对不齐代码导致报错哈哈！为了方便像我这样的小白进行自定义部署，我就将所以可以改的文字和连接全部写到了 <code>config.ts</code>，这样只需要去修改这个文件就好了。</p>
+<ul>
+<li><p><strong>样式复刻</strong>：直接参考清羽飞扬版本的界面布局、配色逻辑，让视觉风格保持一致；其实我也想加一行那个标题小字的，但是最后我失败了。</p>
+<p><img src="https://i.p-i.vip/133/20251119-691d3add56557.png" alt="清羽飞扬样式"></p>
+</li>
+<li><p><strong>配置中心化</strong>：将所有可自定义内容（页面标题、版权信息、GitHub 链接等）集中到根目录 <code>config.ts</code> 中，后续修改只需维护这一个文件，大幅降低个性化成本。为我这样小白方便直接修改使用；</p>
+</li>
+</ul>
+<h2 id="🎨部署CoverView后效果"><a href="#🎨部署CoverView后效果" class="headerlink" title="🎨部署CoverView后效果"></a>🎨部署CoverView后效果</h2><p>本站所有文章均采用了该项目生成封面，本站自部署地址如下：</p>
+<p>野猪佩奇弟弟の封面生成：<a target="_blank" rel="noopener" href="https://cover.814925.xyz/">https://cover.814925.xyz</a></p>
+<p><img src="https://i.p-i.vip/133/20251119-691d354a85116.png" alt="1763521859571.png"></p>
+<p><img src="https://i.p-i.vip/133/20251119-691d35976264a.png" alt="1763521892504.png"></p>
+<h2 id="📦-API-说明"><a href="#📦-API-说明" class="headerlink" title="📦 API 说明"></a>📦 API 说明</h2><p>项目依赖 Unsplash API 提供图片资源，使用前需注意：</p>
+<ol>
+<li>需在环境变量中配置 <code>REACT_APP_UNSPLASH_ACCESS_KEY</code>（支持通过 <code>.env</code> 或系统环境变量设置）</li>
+<li>API 调用限制：Unsplash 免费计划默认<strong>每小时最多 50 次请求</strong>，超过限制会导致图片加载失败</li>
+<li>若无需图片功能或遇到限制，可在代码中注释相关调用逻辑</li>
+</ol>
+<h2 id="🔑-API-配置（必看）"><a href="#🔑-API-配置（必看）" class="headerlink" title="🔑 API 配置（必看）"></a>🔑 API 配置（必看）</h2><p>项目依赖 Unsplash API 实现图片搜索功能，需先配置环境变量：</p>
+<ol>
+<li><p><strong>获取 API 密钥</strong></p>
+<p>访问 <a target="_blank" rel="noopener" href="https://unsplash.com/developers">Unsplash Developers</a>，按以下步骤操作：</p>
+<ul>
+<li>右上角注册账号并登录</li>
+<li>点击「New Application」创建应用</li>
+<li>进入应用详情页，获取 <code>Access Key</code></li>
+</ul>
+</li>
+<li><p><strong>配置环境变量</strong></p>
+<p>部署时需填入以下环境变量：</p>
+<ul>
+<li><code>REACT_APP_UNSPLASH_ACCESS_KEY</code>：对应 Unsplash 的 <code>Access Key</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="✨-功能优化"><a href="#✨-功能优化" class="headerlink" title="✨ 功能优化"></a>✨ 功能优化</h2><p>在原项目基础上，本分支主要做了以下调整：</p>
+<ol>
+<li>精简首页结构，移除冗余页面，聚焦核心功能</li>
+<li>底部新增版权信息与”关于本站”入口，支持自定义跳转链接</li>
+<li>实现配置集中化管理：所有可自定义的文字（标题、版权信息等）和链接均统一维护在 <code>config.ts</code> 中，修改无需改动业务代码</li>
+</ol>
+<h2 id="🔧-配置说明"><a href="#🔧-配置说明" class="headerlink" title="🔧 配置说明"></a>🔧 配置说明</h2><p>所有可自定义内容均在根目录 <code>config.ts</code> 中维护，主要包括：</p>
+<ul>
+<li><p>页面标题、头部文字等展示文本</p>
+</li>
+<li><p>底部版权所有者、跳转链接</p>
+</li>
+<li><p>“关于本站”文字及链接</p>
+</li>
+<li><p>GitHub仓库地址等</p>
+<p><img src="https://i.p-i.vip/133/20251119-691d392f48930.png" alt="1763522857656.png"></p>
+</li>
+</ul>
+<p>示例配置片段：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config.ts 关键配置示例</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">headerTitle</span>: <span class="string">&quot;自定义封面生成&quot;</span>,       <span class="comment">// 头部标题</span></span><br><span class="line">  <span class="attr">copyrightOwner</span>: <span class="string">&quot;你的名称&quot;</span>,          <span class="comment">// 版权所有者</span></span><br><span class="line">  <span class="attr">ownerUrl</span>: <span class="string">&quot;https://你的网站&quot;</span>,        <span class="comment">// 所有者链接</span></span><br><span class="line">  <span class="attr">githubRepoUrl</span>: <span class="string">&quot;https://你的仓库地址&quot;</span> <span class="comment">// 项目仓库链接</span></span><br><span class="line">  <span class="comment">// 更多配置详见文件</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="🚀-部署方式"><a href="#🚀-部署方式" class="headerlink" title="🚀 部署方式"></a>🚀 部署方式</h2><p>支持多种现代化部署平台：</p>
+<ul>
+<li>Vercel</li>
+<li>Cloudflare Pages</li>
+<li>EdgeOne Pages</li>
+<li>其他支持静态站点部署的平台</li>
+</ul>
+<h2 id="⚡CDN赞助"><a href="#⚡CDN赞助" class="headerlink" title="⚡CDN赞助"></a>⚡CDN赞助</h2><p>本项目 CDN 加速及安全防护由 Tencent EdgeOne 赞助：EdgeOne 提供长期有效的免费套餐，包含不限量的流量和请求，覆盖中国大陆节点，且无任何超额收费，感兴趣的朋友可以去 EdgeOne 官网获取 <a target="_blank" rel="noopener" href="https://edgeone.ai/zh?from=github">最佳亚洲 CDN、Edge 和安全解决方案 - 腾讯 EdgeOne <img src="https://edgeone.ai/media/34fe3a45-492d-4ea4-ae5d-ea1087ca7b4b.png" alt="img"></a></p>
+<h2 id="🌟-致谢"><a href="#🌟-致谢" class="headerlink" title="🌟 致谢"></a>🌟 致谢</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/rutikwankhade">Rutik Wankhade</a>（原始 CoverView 项目）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Lruihao">Lruihao</a>（CoverView 汉化版本）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/willow-god">willow-god</a>（<del>抄</del>参清羽飞扬版本的优化思路）</li>
+<li>Unsplash 社区的摄影师们（提供无版权优质图片资源）</li>
+<li><a target="_blank" rel="noopener" href="https://www.baiwulin.work/">白雾林’s Picbed图床</a>（感谢大佬提供的免费图床）</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><div class="post-copyright__author_img"><img class="post-copyright__author_img_front" src="/img/logo.png"></div><div class="post-copyright__author_name">野猪佩奇弟弟</div><div class="post-copyright__author_desc">记录让幸福可以翻阅</div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div><div class="post-reward"><div class="reward-button" title="赞赏作者" onclick="AddRewardMask()"><i class="solitude fas fa-heart"></i>赞赏作者</div><div class="reward-main"><ul class="reward-all"><span class="reward-title">感谢您的赞赏</span><ul class="reward-group"><li class="reward-item"><a target="_blank" rel="noopener" href="https://img.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg"><img class="post-qr-code-img nolazyload" src="https://img.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg" alt="微信" style="border-color: var(--efu-black)"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a target="_blank" rel="noopener" href="https://img.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg"><img class="post-qr-code-img nolazyload" src="https://img.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg" alt="支付宝" style="border-color: var(--efu-black)"></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/rewards/"><div class="reward-text">赞赏名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值</div></a></ul></div></div><script>function RemoveRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "none";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "none";
+    }
+}
+
+function AddRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "flex";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "flex";
+    }
+}</script></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文是原创文章，采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">野猪佩奇弟弟</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>腾讯云EdgeonePages<span class="tagsPageCount">2</span></span></a><a class="post-meta__tags" href="/tags/%E5%B0%81%E9%9D%A2/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>封面<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/6af11725/"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CloudFlare-ImgBed免费无限图床小白部署教程</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fas fa-comment"></i><span> 评论</span><span class="count"> (<span class="waline-comment-count"><i class="solitude fas fa-spinner fa-spin"></i></span>)</span></div></div><div class="comment-wrap"><div id="waline-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="top-group"><div class="sayhi" id="sayhi" onclick="sco.changeWittyWord()"></div></div></div><div class="avatar"><img alt="头像" src="/img/touxiangpq.png"></div><div class="description"></div><div class="bottom-group"><span class="left"><div class="name">野猪佩奇弟弟</div><div class="desc">只有迎风，风筝才能飞得更高。</div></span><div class="social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/everfu" title="Github"><i class="solitude  fab fa-github"></i></a><a class="social-icon" target="_blank" rel="noopener" href="https://space.bilibili.com/1329819902" title="Bilibili"><i class="solitude  fab fa-bilibili"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fas fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%99%E5%8D%9A%E5%AE%A2%E5%B0%81%E9%9D%A2-%E2%80%9C%E5%8A%A0%E7%82%B9%E6%96%99%E2%80%9D%EF%BC%9A%E8%87%AA%E5%AE%9A%E4%B9%89-CoverView-%E5%B0%81%E9%9D%A2%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7"><span class="toc-text">给博客封面 “加点料”：自定义 CoverView 封面生成工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A5%E6%94%B9%E9%80%A0%E6%80%9D%E8%B7%AF%EF%BC%9A%E6%8A%84%E5%87%BA%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="toc-text">🔥改造思路：抄出个性化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%A8%E9%83%A8%E7%BD%B2CoverView%E5%90%8E%E6%95%88%E6%9E%9C"><span class="toc-text">🎨部署CoverView后效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%A6-API-%E8%AF%B4%E6%98%8E"><span class="toc-text">📦 API 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%91-API-%E9%85%8D%E7%BD%AE%EF%BC%88%E5%BF%85%E7%9C%8B%EF%BC%89"><span class="toc-text">🔑 API 配置（必看）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%A8-%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-text">✨ 功能优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A7-%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">🔧 配置说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="toc-text">🚀 部署方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A1CDN%E8%B5%9E%E5%8A%A9"><span class="toc-text">⚡CDN赞助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8C%9F-%E8%87%B4%E8%B0%A2"><span class="toc-text">🌟 致谢</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fas fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/posts/acd80ac1/" title="给博客封面 “加点料”：自定义 CoverView 封面生成工具"><div class="thumbnail"><img alt="给博客封面 “加点料”：自定义 CoverView 封面生成工具" src="https://i.p-i.vip/133/20251120-691ebf73edfde.png"></div><div class="content"><span class="title" href="/posts/acd80ac1/" title="给博客封面 “加点料”：自定义 CoverView 封面生成工具">给博客封面 “加点料”：自定义 CoverView 封面生成工具</span><span class="categories" href="/posts/acd80ac1/">网站建设</span></div></a><a class="aside-list-item" href="/posts/6af11725/" title="CloudFlare-ImgBed免费无限图床小白部署教程"><div class="thumbnail"><img alt="CloudFlare-ImgBed免费无限图床小白部署教程" src="https://img.814925.xyz/file/hexo/img/1761377902349_Canvas-Ruom.webp"></div><div class="content"><span class="title" href="/posts/6af11725/" title="CloudFlare-ImgBed免费无限图床小白部署教程">CloudFlare-ImgBed免费无限图床小白部署教程</span><span class="categories" href="/posts/6af11725/">网站建设</span></div></a><a class="aside-list-item" href="/posts/6af1456/" title="给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能"><div class="thumbnail"><img alt="给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能" src="https://img.814925.xyz/file/1761615960421_20251028094546865.png"></div><div class="content"><span class="title" href="/posts/6af1456/" title="给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能">给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能</span><span class="categories" href="/posts/6af1456/">网站建设</span></div></a><a class="aside-list-item" href="/posts/7010544e/" title="Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章"><div class="thumbnail"><img alt="Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章" src="https://img.814925.xyz/file/hexo/img/1761381238227_20251025163353953.png"></div><div class="content"><span class="title" href="/posts/7010544e/" title="Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章">Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章</span><span class="categories" href="/posts/7010544e/">网站建设</span></div></a><a class="aside-list-item" href="/posts/f5b7655d/" title="缤纷云bitiful对象储存配合Picgo免费图床"><div class="thumbnail"><img alt="缤纷云bitiful对象储存配合Picgo免费图床" src="https://bitiful.814925.xyz/2024/11/25/202411251521793.webp"></div><div class="content"><span class="title" href="/posts/f5b7655d/" title="缤纷云bitiful对象储存配合Picgo免费图床">缤纷云bitiful对象储存配合Picgo免费图床</span><span class="categories" href="/posts/f5b7655d/">网站建设</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" target="_blank" rel="noopener" href="https://github.com/everfu" title="Github"><i class="solitude  fab fa-github"></i></a><a class="deal_link" href="mailto:o@everfu.org" title="Mail"><i class="solitude  far fa-envelope"></i></a><div><div class="nolazyload footer_mini_logo" id="footer_mini_logo" title="返回顶部" onclick="sco.toTop()"><img src="/img/touxiangpq.png" alt="返回顶部"></div></div><a class="deal_link" target="_blank" rel="noopener" href="https://space.bilibili.com/1329819902" title="Bilibili"><i class="solitude  fab fa-bilibili"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://v.douyin.com/iJsLc8jt/" title="Douyin"><i class="solitude  fab fa-tiktok"></i></a></div><div><div id="st-footer"><div class="footer-group"><h3 class="footer-title">自建工具</h3><div class="footer-links"><a class="footer-item" target="_blank" rel="noopener" href="https://cover.814925.xyz/" title="封面生成">封面生成</a><a class="footer-item" target="_blank" rel="noopener" href="https://img.814925.xyz/" title="自建图床">自建图床</a><a class="footer-item" target="_blank" rel="noopener" href="https://status.814925.xyz/" title="站点检测">站点检测</a><a class="footer-item" target="_blank" rel="noopener" href="https://rewards.zoerun.qzz.io/" title="支持作者">支持作者</a></div></div><div class="footer-group"><h3 class="footer-title">特别鸣谢</h3><div class="footer-links"><a class="footer-item" target="_blank" rel="noopener" href="https://blog.liushen.fun/" title="清羽飞扬">清羽飞扬</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.qjqq.cn/" title="青桔气球">青桔气球</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.zrf.me/" title="周润发">周润发</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.bsgun.cn/" title="梦爱吃鱼">梦爱吃鱼</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.quenan.cn/" title="鹊楠">鹊楠</a></div></div><div class="footer-group"><h3 class="footer-title">导航</h3><div class="footer-links"><a class="footer-item" href="/archives/" title="归档">归档</a><a class="footer-item" href="/categories/" title="分类">分类</a><a class="footer-item" href="/tags/" title="标签">标签</a><a class="footer-item" href="/privacy/" title="隐私协议">隐私协议</a><a class="footer-item" href="/cookies/" title="Cookies">Cookies</a><a class="footer-item" href="/copyright/" title="版权协议">版权协议</a></div></div><div class="footer-group"><div class="footer-title-group"><h3 class="footer-title">友链</h3><button class="random-friends-btn" onclick="randomLinksList()" title="友链"><i class="solitude fas fa-arrows-rotate"></i></button></div><div class="footer-links" id="friend-links-in-footer"></div></div></div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2023 - 2025 By<a class="footer-bar-link" href="/" title="野猪佩奇弟弟">野猪佩奇弟弟</a></div><div class="beian-group"><div><a class="footer-bar-link" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch" title="渝公网安备50023302000356号"><div><img class="beian-icon" src="https://beian.mps.gov.cn/img/logo01.dd7ff50e.png" alt="渝公网安备50023302000356号"></div><span class="beian-name">渝公网安备50023302000356号</span></a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/" title="渝ICP备2024044325号-1"><div><img class="beian-icon" src="/img/beian.miit.gov.cn.ico" alt="渝ICP备2024044325号-1"></div><span class="beian-name">渝ICP备2024044325号-1</span></a></div><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" title="框架：Hexo">框架：Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" title="主题：Solitude">主题：Solitude</a></div></div><div><div class="footer-bar-right"><a class="footer-bar-link" href="/rewards/" title="">打赏</a><a class="footer-bar-link" href="/atom.xml" title="">订阅</a><a class="footer-bar-link" href="/copyright/" title=""><i class="solitude fas fa-copyright"></i><i class="solitude fab fa-creative-commons-by"></i><i class="solitude fab fa-creative-commons-nc"></i><i class="solitude fab fa-creative-commons-nd"></i></a><a class="footer-bar-link" href="/about/" title="">关于</a></div></div></div></div><div class="comment-barrage needEndHide"></div></footer></div><div><!-- Critical scripts loaded synchronously--><script src="/js/utils.js?v=3.0.21"></script><script src="/js/main.js?v=3.0.21"></script><!-- Non-critical scripts loaded asynchronously--><script async src="/js/third_party/waterfall.min.js?v=3.0.21"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><!-- Feature-specific scripts loaded asynchronously--><script defer src="https://cdn.jsdelivr.net/npm/typeit@8.8.7/dist/index.umd.min.js"></script><script defer src="/js/tw_cn.js?v=3.0.21"></script><!-- UI enhancement scripts--><script defer src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.min.js"></script><!-- Music player scripts--><!-- Cover color processing scripts--><script defer src="https://cdn.jsdelivr.net/npm/colorthief@2.6.0/dist/color-thief.min.js"></script><script defer src="/js/covercolor/local.js?v=3.0.21"></script><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+utils.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+</script><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!-- Search functionality--><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.75.7/dist/instantsearch.production.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@5.19.0/dist/algoliasearch.umd.min.js"></script><!-- Right menu functionality--><div class="js-pjax"><div id="waline-wrap"></div><script>(() => {
+    let walineInitFunction = window.walineFn || null
+
+    function initWaline(initFn) {
+        const walineOptions = {
+            el: '#waline-wrap',
+            serverURL: 'https://waline.814925.xyz', // 替换为你的Waline服务端地址
+            pageview: true,
+            dark: 'html[data-theme="dark"]',
+            path: window.location.pathname,
+            comment: true,
+            //适配白雾林's Picbed图床 注册地址https://www.baiwulin.work/
+            imageUploader: (file) => {
+                if (!file) throw new Error('请选择图片');
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadUrl = 'https://www.baiwulin.work/api/v1/upload';
+
+                return fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'cors',
+                    headers: {
+                        'Authorization': 'Bearer 56|QdL8gpQonqX3Isg5f8tnR2xkOtPgd9HcXov7zpLt', // 你的图床Token 
+                        'Accept': 'application/json'
+                    },
+                })
+                .then(resp => {
+                    if (!resp.ok) throw new Error(`上传失败：${resp.status}`);
+                    return resp.json();
+                })
+                .then(resp => {
+                    console.log('图床完整响应：', resp);
+                    // 从links.url提取完整图片URL
+                    const imgUrl = resp.data.links.url;
+                    if (!imgUrl) throw new Error('未找到图片URL字段');
+                    return imgUrl;
+                })
+                .catch(err => {
+                    console.error('图片上传错误：', err);
+                    throw err;
+                });
+            },
+            ...{"markdown":true,"emoji":true,"requiredMeta":["nick","mail"],"pageSize":10,"required":true,"locale":{"placeholder":"📸 支持粘贴图片，将自动上传至图床～ 快来分享你的观点吧～"}}
+        }
+        const walineInstance = initFn(walineOptions)
+        utils.addGlobalFn('pjax', () => walineInstance.destroy(), 'destroyWaline')
+        GLOBAL_CONFIG.lightbox && utils.lightbox(document.querySelectorAll('#comment .wl-content img:not(.wl-emoji)'))
+        sco.owoBig({
+            body: '.wl-emoji-popup',
+            item: '.wl-tab-wrapper button'
+        })
+    }
+
+    async function loadWaline() {
+        if (walineInitFunction) initWaline(walineInitFunction)
+        else {
+            await utils.getCSS('https://cdn.jsdelivr.net/npm/@waline/client@3.4.3/dist/waline.min.css')
+            const {init} = await import('https://cdn.jsdelivr.net/npm/@waline/client@3.4.3/dist/waline.min.js')
+            walineInitFunction = init || Waline.init
+            initWaline(walineInitFunction)
+            window.walineFn = walineInitFunction
+        }
+        false && barrageWaline()
+    }
+
+    if (true || true) {
+        if (true) utils.loadComment(document.getElementById('waline-wrap'), loadWaline)
+        else loadWaline()
+    } else window.loadTwoComment = loadWaline
+})()
+</script></div></div><script>const links = [{"name":"Hexo","link":"https://hexo.io/zh-cn/"},{"name":"张洪Heo","link":"https://blog.zhheo.com/"},{"name":"Solitude","link":"https://solitude.js.org/"},{"name":"❖星港◎Star☆","link":"https://blog.starsharbor.com"},{"name":"Mo的记事簿","link":"https://blog.xiowo.net/"}]
+const randomText = '点击前往按钮进入随机一个友链，不保证跳转网站的安全性和可用性。本次随机到的是本站友链：⌈ ${name} ⌋'
+function travelling() {
+    const link = links[utils.randomNum(links.length)];
+    Snackbar.show({
+        text: randomText.replace(/\$\{name}/,link.name),
+        duration: 8000,
+        pos: 'top-center',
+        actionText: '前往',
+        onActionClick: function(element) {
+            element.style.opacity = 0;
+            window.open(link.link, '_blank');
+        }
+    });
+}
+</script><script>function randomLinksList() {
+    const linkcard = document.getElementById('friend-links-in-footer');
+    if (linkcard == null) return;
+
+    let data = '';
+    let linksCopy = [...links];
+    let count = Math.min(3, linksCopy.length);
+
+    for (let i = 0; i < count; i++) {
+        let index = utils.randomNum(linksCopy.length);
+        const {link, name} = linksCopy[index];
+        data += `<a class="footer-item" href="${link}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`;
+        linksCopy.splice(index, 1);
+    }
+
+    linkcard.innerHTML = data + '<a class="footer-item" href="/links/">更多</a>';
+}</script><!-- pjax--><script>let pjax = null;
+
+function initPjax() {
+    if (typeof Pjax === 'undefined') {
+        console.warn('Pjax is not loaded yet, retrying...');
+        setTimeout(initPjax, 100);
+        return;
+    }
+
+    pjax = new Pjax({
+        elements: 'a:not([target="_blank"])',
+        selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+        cacheBust: false,
+        analytics: false,
+        scrollRestoration: false
+    })
+
+    // 将 pjax 实例挂载到全局
+    window.pjax = pjax;
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    document.addEventListener('pjax:complete', () => {
+        window.refreshFn()
+
+        document.querySelectorAll('script[data-pjax]').forEach(item => {
+            const newScript = document.createElement('script')
+            const content = item.text || item.textContent || item.innerHTML || ""
+            Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+            newScript.appendChild(document.createTextNode(content))
+            item.parentNode.replaceChild(newScript, item)
+        })
+
+        GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+    })
+
+    document.addEventListener('pjax:error', (e) => {
+        if (e.request.status === 404) {
+            pjax.loadUrl('/404.html')
+        }
+    })
+}
+
+// 初始化 Pjax
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPjax);
+} else {
+    initPjax();
+}</script><!-- google adsense--><div id="algolia-search"><div class="search-dialog"><div class="algolia-navbar"><div class="search-dialog__title" id="algolia-search-title">搜索</div><div class="algolia-tips"><i class="solitude fab fa-algolia"></i><span class="algolia-tips-text">Algolia</span></div><span class="search-close-button"><i class="solitude fas fa-xmark"></i></span></div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><div id="search-results"><div id="algolia-hits"></div></div><div id="algolia-tips"><div id="algolia-pagination"></div><div id="algolia-stats"></div></div></div><div id="search-mask"></div></div><script src="/js/search/algolia.js?v=3.0.21"></script></body></html>
+        <script>
+            const posts = ["posts/acd80ac1/","posts/6af11725/","posts/6af1456/","posts/7010544e/","posts/f5b7655d/","posts/5ab66853/","posts/7a176405/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
