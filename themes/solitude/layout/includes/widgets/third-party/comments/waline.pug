@@ -1,6 +1,8 @@
 - const { envId, option ,pageview } = theme.waline
 - const { lazyload, count, commentBarrage,use } = theme.comment
 
+#waline-wrap(comment_id=page.comment_id)
+
 script.
     (() => {
         let walineInitFunction = window.walineFn || null
@@ -8,11 +10,44 @@ script.
         function initWaline(initFn) {
             const walineOptions = {
                 el: '#waline-wrap',
-                serverURL: '!{envId}',
+                serverURL: '!{envId}', // 替换为你的Waline服务端地址
                 pageview: !{pageview},
                 dark: 'html[data-theme="dark"]',
                 path: window.location.pathname,
                 comment: !{count},
+                //适配白雾林's Picbed图床 注册地址https://www.baiwulin.work/
+                imageUploader: (file) => {
+                    if (!file) throw new Error('请选择图片');
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const uploadUrl = 'https://www.baiwulin.work/api/v1/upload';
+
+                    return fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'cors',
+                        headers: {
+                            'Authorization': 'Bearer 56|QdL8gpQonqX3Isg5f8tnR2xkOtPgd9HcXov7zpLt', // 你的图床Token 
+                            'Accept': 'application/json'
+                        },
+                    })
+                    .then(resp => {
+                        if (!resp.ok) throw new Error(`上传失败：${resp.status}`);
+                        return resp.json();
+                    })
+                    .then(resp => {
+                        console.log('图床完整响应：', resp);
+                        // 从links.url提取完整图片URL
+                        const imgUrl = resp.data.links.url;
+                        if (!imgUrl) throw new Error('未找到图片URL字段');
+                        return imgUrl;
+                    })
+                    .catch(err => {
+                        console.error('图片上传错误：', err);
+                        throw err;
+                    });
+                },
                 ...!{JSON.stringify(option)}
             }
             const walineInstance = initFn(walineOptions)
@@ -45,23 +80,22 @@ script.
 if commentBarrage
     script.
         async function barrageWaline() {
-            const url = new URL('!{envId}/api/comment')
-            const params = {path: window.location.pathname, sortBy: 'insertedAt_asc'}
+            const url = new URL('!{envId}/api/comment') // 与Waline服务端地址同步
+            const params = {path: window.location.pathname, pageSize: 10, page: 1, lang: 'zh-CN', sortBy: 'insertedAtDesc'}
             Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value))
             await fetch(url).then(async res => {
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
                 const data = await res.json();
                 const regex = /<img [^>]*class="wl-emoji"[^>]*>/;
                 const init = () => {
-                    initializeCommentBarrage(data.data.data
+                    initializeBarrage(data.data.data
                         .map(item => ({
                             nick: item.nick,
-                            mailId: item.avatar,
-                            content: item.comment.replace(regex, ''),
+                            content: item.content.replace(regex, ''),
                             id: item.objectId
                         })))
                 }
-                if (typeof initializeCommentBarrage === "undefined") await utils.getScript('!{url_for(theme.cdn.commentBarrage)}').then(init)
+                if (typeof initializeBarrage === "undefined") await utils.getScript('!{url_for(theme.cdn.barrage_js)}').then(init)
                 else init()
             }).catch(error => console.error("An error occurred while fetching comments: ", error))
         }

@@ -535,28 +535,29 @@ footer:
       Douyin: https://v.douyin.com/iJsLc8jt/ || fab fa-tiktok
   # 友情链接
   group:
-    服务:
-      EdgeOne: https://console.cloud.tencent.com/edgeone/
-      Cloudflare: https://dash.cloudflare.com/
-      华为云DNS: https://console.huaweicloud.com/dns/
-      多吉云CDN: https://console.dogecloud.com/cdn/
-      又拍云: https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral/
+    自建工具:
+      封面生成: https://cover.814925.xyz/
+      自建图床: https://img.814925.xyz/
+      站点检测: https://status.814925.xyz/
+      支持作者: https://rewards.zoerun.qzz.io/
 
-    导航:
-      归档: /archives/
-      分类: /categories/
-      标签: /tags/
-      打赏: /rewards/
-    协议:
-      隐私协议: /privacy/
-      Cookies: /cookies/
-      版权协议: /copyright/
-    鸣谢:
+    特别鸣谢:
       清羽飞扬: https://blog.liushen.fun/
       青桔气球: https://blog.qjqq.cn/
       周润发: https://blog.zrf.me/
       梦爱吃鱼: https://blog.bsgun.cn/ 
       鹊楠 : https://blog.quenan.cn/
+
+    导航:
+      归档: /archives/
+      分类: /categories/
+      标签: /tags/
+      隐私协议: /privacy/
+      Cookies: /cookies/
+      版权协议: /copyright/
+
+
+    
 
 
   # 随机友链
@@ -799,7 +800,7 @@ pwa:
 comment:
   # Which commenting system to use(e.g. waline or waline,twikoo)
   # 使用哪个评论系统（例如： waline or waline,twikoo）
-  use: twikoo # waline, twikoo, valine, artalk, giscus # Up to two comment systems can be turned on at the same time
+  use: waline # waline, twikoo, valine, artalk, giscus # Up to two comment systems can be turned on at the same time
   # Whether to display the hot comment switch.
   # 是否显示热门评论开关
   commentBarrage: false
@@ -837,14 +838,17 @@ twikoo: # https://twikoo.js.org/
   option: # twikoo option
 # Waline: https://solitude.js.org/configuration/comment/waline
 waline: # https://waline.js.org/
-  envId: https://waline.zoerun.qzz.io # 你的 Waline 服务端地址（已正确填写）
+  envId: https://waline.814925.xyz # 你的服务端地址（确保字段名是 envId，首字母大写）
   pageview: true # 启用浏览量统计
-  option: # Waline 基础功能配置
+  option: # 主题要求的嵌套层级，不可删除！
     markdown: true # 支持 Markdown 评论
     emoji: true # 显示表情包
-    requiredMeta: ['nick', 'mail'] # 评论必填：昵称+邮箱
-    placeholder: "来说说你的看法吧～" # 评论框提示文字
+    requiredMeta: ['nick', 'mail'] # 昵称+邮箱 双必填
     pageSize: 10 # 每页显示10条评论
+    required: true # 禁止纯空白评论
+    # 👇 关键：把 locale 放进 option 里，模板才能读取到
+    locale:
+      placeholder: "📸 支持粘贴图片，将自动上传至图床～ 快来分享你的观点吧～" # 自定义提示文字
 # Valine: https://solitude.js.org/configuration/comment/valine
 valine:
   appId: # leancloud application app id
