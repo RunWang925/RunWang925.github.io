@@ -31,6 +31,15 @@ jobs:
           npm install -g hexo-cli  # 全局安装Hexo命令行
           npm install  # 安装package.json里的依赖
 
+      # ======================== 新增步骤：执行links.js生成友链JSON ========================
+      # 1. 安装yamljs依赖（links.js需要这个包解析yml文件）
+      - name: Install yamljs for links.js
+        run: npm install yamljs --save
+      # 2. 执行links.js脚本，生成flink_count.json到source目录
+      - name: Run links.js to generate flink_count.json
+        run: node links.js
+      # ================================================================================
+
       # 第四步：生成静态文件（就是本地hexo g那一步）
       - name: Generate Hexo static files
         run: hexo clean && hexo generate  # clean清除旧文件，generate生成新静态文件
