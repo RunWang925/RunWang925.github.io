@@ -7,7 +7,7 @@ categories:
 tags:
   - 腾讯云EdgeonePages
   - 封面
-date: 2025-11-220 15:10:49
+date: 2025-11-22 15:10:49
 type:
 comment:
 ai_text:
@@ -128,3 +128,7 @@ export default {
 - [willow-god](https://github.com/willow-god)（~~抄~~参清羽飞扬版本的优化思路）
 - Unsplash 社区的摄影师们（提供无版权优质图片资源）
 - [白雾林's Picbed图床](https://www.baiwulin.work)（感谢大佬提供的免费图床）
+
+## ⚠️ 须知
+
+技术说明：本文图片存储依赖白雾林's Picbed图床

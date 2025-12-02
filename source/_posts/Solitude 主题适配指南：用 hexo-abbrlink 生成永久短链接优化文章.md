@@ -1,6 +1,6 @@
 ---
 title: Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章
-cover: 'https://img.814925.xyz/file/hexo/img/1761381238227_20251025163353953.png'
+cover: 'https://cdnimg-doge.814925.xyz/file/hexo/img/1761381238227_20251025163353953.png'
 categories:
   - 网站建设
 tags:
@@ -37,7 +37,7 @@ hexo-abbrlink 是一款用于生成固定、简洁且唯一的文章链接（短
 npm install hexo-abbrlink --save
 ```
 
-![image-20251025161630706](https://img.814925.xyz/file/hexo/img/1761380199459_image-20251025161630706.png)
+![image-20251025161630706](https://cdnimg-doge.814925.xyz/file/hexo/img/1761380199459_image-20251025161630706.png)
 
 ## 三、使用 
 
@@ -51,7 +51,7 @@ posts想怎么改都可以 自己喜欢,也就是也会文件
 permalink: posts/:abbrlink.html
 ```
 
-![image-20251025161806138](https://img.814925.xyz/file/hexo/img/1761380291426_image-20251025161806138.png)
+![image-20251025161806138](https://cdnimg-doge.814925.xyz/file/hexo/img/1761380291426_image-20251025161806138.png)
 
 ###  添加插件配置
 
@@ -66,12 +66,12 @@ abbrlink:
   show_link: true
 ```
 
-![image-20251025162225288](https://img.814925.xyz/file/hexo/img/1761380559403_image-20251025162225288.png)
+![image-20251025162225288](https://cdnimg-doge.814925.xyz/file/hexo/img/1761380559403_image-20251025162225288.png)
 
 然后保存预览一下会发现文章的头部abbrlink：自动生成了随机值了
 
-![image-20251025162351293](https://img.814925.xyz/file/hexo/img/1761380641376_image-20251025162351293.png)
+![image-20251025162351293](https://cdnimg-doge.814925.xyz/file/hexo/img/1761380641376_image-20251025162351293.png)
 
 网页预览效果
 
-![image-20251025163732690](https://img.814925.xyz/file/hexo/img/1761381462265_image-20251025163732690.png)
+![image-20251025163732690](https://cdnimg-doge.814925.xyz/file/hexo/img/1761381462265_image-20251025163732690.png)
