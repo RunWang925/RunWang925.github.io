@@ -13,4 +13,7 @@ if page.banner
                 include ../widgets/page/links/linksItem
             when 'discn'
                 include ../widgets/page/links/linksDiscn
-    != page.content
+    != page.content  
+
+// 引入延迟标签JS
+script(src='/js/flink-status.js')

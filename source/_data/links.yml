@@ -1,60 +1,56 @@
 banner_suffix:
 links:
-  - class_name: 框架与主题
-    descr: 本站搭建采用的原框架与主题
+  - class_name: 给予帮助の佬们😘
+    descr: 大佬选手😎 随便扒一个，够我抄着学仨月都不重样
     type: card
     suffix:
     link_list:
-      - name: Hexo
-        link: https://hexo.io/zh-cn/
-        avatar: https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg
-        descr: 快速、简单且强大的网站框架
-        topimg: https://s2.loli.net/2024/11/10/Zm5dvbLOUMr9iFk.webp
-      - name: Solitude
-        link: https://solitude.js.org/
-        avatar: https://i.p-i.vip/133/20251122-692141add0412.webp
-        descr: 一个卡片UI主题，适用于 Hexo
-        topimg: https://i.p-i.vip/133/20251122-6921415e42952.png
-  - class_name: 小伙伴
-    descr: 一些可爱的朋友🥰
-    type: item
-    suffix:
-    link_list:
-      - name: ❖星港◎Star☆
-        link: https://blog.starsharbor.com
-        avatar: https://bu.dusays.com/2025/04/11/67f92f6fcfb26.webp
-        descr: 以博客记录生活与热爱！
-      - name: Mo的记事簿
-        link: https://blog.xiowo.net/
-        avatar: https://blog.xiowo.net/img/avatar.png
-        descr: 万年鸽王，哈哈OvO
+      - name: 清羽飞扬
+        link: https://blog.liushen.fun/
+        avatar: https://blog.liushen.fun/info/avatar.ico
+        descr: 柳影曳曳，清酒孤灯，扬笔撒墨，心境如霜
+        topimg: https://blog.liushen.fun/info/siteshot.jpg
+      - name: 张洪Heo
+        link: https://blog.zhheo.com/
+        avatar: https://img.zhheo.com/i/67d8fa75943e4.webp
+        descr: 分享设计与科技生活
+        topimg: https://img.zhheo.com/i/67d8fb3c51399.webp
+      - name: 青桔气球
+        link: https://blog.qjqq.cn/
+        avatar: https://q2.qlogo.cn/headimg_dl?dst_uin=1645253&spec=640
+        descr: 分享网络安全与科技生活
+        topimg: https://q2.qlogo.cn/headimg_dl?dst_uin=1645253&spec=640
+      - name: 安知鱼
+        link: https://blog.anheyu.com/
+        avatar: https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg
+        descr: 生活明朗，万物可爱
+        topimg: https://npm.elemecdn.com/anzhiyu-theme-static@1.1.6/img/blog.anheyu.com.jpg
+      - name: 鹊楠の小窝
+        link: https://blog.quenan.cn/
+        avatar: https://i.p-i.vip/43/20240913-66e403f2331ec.webp
+        descr: 世界那么大，我想去看看
+        topimg: https://i.p-i.vip/133/20251203-692ff49fd2511.jpg
+      - name: 周润发
+        link: https://blog.zrf.me/
+        avatar: https://blog.zrf.me/img/logo.webp
+        descr: 收录开源，好用的互联网项目
+        topimg: https://blog.zrf.me/img/web_img.webp
+      - name: 梦爱吃鱼
+        link: https://blog.bsgun.cn/
+        avatar: https://oss-cdn.bsgun.cn/logo/avatar.256.png
+        descr: 不负心灵，不负今生。
+        topimg: https://i.p-i.vip/133/20251203-692ff4c36a859.jpg
 
-
-  - class_name: 视觉精选博客
-    descr: 带网站截图的优质博客，视觉化展示更直观
+  - class_name: 伸手相助，自带温柔滤镜✨
+    descr: 技术上是靠谱前辈，相处起来像合拍朋友，双向奔赴才香～
     type: card
     suffix:
     link_list:
-      - name: 未似风不息
-        link: https://www.weisifengbuxi.top/
-        avatar: https://s21.ax1x.com/2025/09/26/pVIFGXq.jpg
-        descr: 学习技术 分享生活
-        topimg: https://s21.ax1x.com/2025/09/29/pVomdB9.png
-      - name: 奇妙页
-        link: https://www.qmye.com/
-        avatar: https://www.qmye.com/wp-content/uploads/favicon.ico
-        descr: 探索AI创意与灵感的奇妙世界
-        topimg: https://www.qmye.com/wp-content/uploads/2025/10/d19b9c15dc1376397b54bdf890bc08a0.png
-      - name: 桉南小屋
-        link: https://blog.yll14.cn
-        avatar: https://blog.yll14.cn/wp-content/uploads/2025/09/圆角-favicon.png
-        descr: 桉南的小屋
-        topimg: https://blog.yll14.cn/wp-content/uploads/2025/09/06ea9cb4f59f07d8-scaled.jpg
-      - name: 六月墨语
-        link: https://blog.june.ink/
-        avatar: https://blog.june.ink/images/avatar.jpg
-        descr: 愿你历尽千帆，归来仍是少年！
-        topimg: https://i.p-i.vip/30/20250916-68c8bcec7a881.jpg
+      - name: 野猪佩奇弟弟
+        link: https://hexo.814925.xyz/
+        avatar: https://hexo.814925.xyz/img/touxiangpq.png
+        descr: 记录让幸福可以翻阅
+        topimg: https://hexo.814925.xyz/img/siteshot.jpg
       - name: 尘の个人博客
         link: https://blog.mcxiaochen.top/
         avatar: https://blog.mcxiaochen.top/favicon.ico
@@ -71,15 +67,19 @@ links:
         descr: 人生近看是悲剧，远看是喜剧
         topimg: https://blog.245179.xyz/images/web.png
 
-  - class_name: 小伙伴
-    descr: 志同道合的朋友们的博客
-    type: time
+  - class_name: 山河辽阔，幸得与你相遇😉
+    descr: 以链为桥，跨越山海，不负同频的羁绊🌿
+    type: item
     suffix:
     link_list:
-      - name: 琢码斋
-        link: https://www.codyz.cn
-        avatar: https://www.codyz.cn/logo.png
-        descr: 专注Unity开发、行测申论攻略、摄影与生活哲思，以代码为刃、笔墨为甲，记录数字江湖的修行
+      - name: ❖星港◎Star☆
+        link: https://blog.starsharbor.com
+        avatar: https://bu.dusays.com/2025/04/11/67f92f6fcfb26.webp
+        descr: 以博客记录生活与热爱！
+      - name: Mo的记事簿
+        link: https://blog.xiowo.net/
+        avatar: https://blog.xiowo.net/img/avatar.png
+        descr: 万年鸽王，哈哈OvO
       - name: 唐晓萌的小站
         link: https://halo.zhihuiyun.work/
         avatar: https://halo.zhihuiyun.work/upload/exsv.webp
@@ -132,4 +132,3 @@ links:
         link: https://www.xrbk.cn
         avatar: https://www.xrbk.cn/favicon.png
         descr: 记录学习与分享资源
-  
