@@ -66,10 +66,27 @@ function jumpToApi() {
 
 ## 友链添加
 如果您想在您的网站上添加我的友链，可以使用以下信息:
+
+{% subtabs 友链配置信息 %}
+
+<!-- tab 配置代码 -->
 ```yaml
-- name: 野猪佩奇弟弟
-  link: https://hexo.814925.xyz/
-  avatar: https://hexo.814925.xyz/img/touxiangpq.png
-  descr: 记录让幸福可以翻阅
-  topimg: https://hexo.814925.xyz/img/siteshot.jpg
-  ```
+ - name: 野猪佩奇弟弟
+   link: https://hexo.814925.xyz/
+   avatar: https://hexo.814925.xyz/img/touxiangpq.png
+   descr: 记录让幸福可以翻阅
+   topimg: https://hexo.814925.xyz/img/siteshot.png
+   linkpage: https://hexo.814925.xyz/links/
+```
+<!-- endtab-->
+<!-- tab 基础信息 -->
+```yaml
+- 网站名称：野猪佩奇弟弟
+- 网站地址：https://hexo.814925.xyz/
+- 网站图标：https://hexo.814925.xyz/img/touxiangpq.png
+- 网站描述：记录学习与分享资源
+- 网站截图：hhttps://hexo.814925.xyz/img/siteshot.png
+- 友链页： https://hexo.814925.xyz/links/
+```
+<!-- endtab-->
+{% endsubtabs %}
