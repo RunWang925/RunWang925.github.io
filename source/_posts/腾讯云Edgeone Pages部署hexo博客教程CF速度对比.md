@@ -6,10 +6,10 @@ top_group_index: 10
 background: '#fff'
 tags:
   - hexo
-  - 腾讯云EdgeonePages
+  - EdgeonePages
   - Cloudflare
 categories:
-  - 分享
+  - 教程分享
 abbrlink: 7a176405
 date: 2024-11-14 16:25:49
 updated:

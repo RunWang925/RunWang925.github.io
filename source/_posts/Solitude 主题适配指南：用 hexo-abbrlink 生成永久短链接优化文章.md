@@ -1,21 +1,20 @@
 ---
-title: Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章
-cover: 'https://cdnimg-doge.814925.xyz/file/hexo/img/1761381238227_20251025163353953.png'
-categories:
+title: Solitude 主题适配指南：用 hexo-abbrlink 生成永久短链接优化文章 # 文章标题（必填）
+cover: 'https://cdnimg-doge.814925.xyz/file/hexo/img/1761381238227_20251025163353953.png' # 文章封面图链接（选填，用于首页/列表页展示）
+categories: # 文章分类（选填，可多个）
   - 网站建设
-tags:
+tags: # 文章标签（选填，可多个）
   - hexo
   - solitude
-  - 主题修改
-abbrlink: 7010544e
-date: 2025-10-25 17:25:49
-type:
-comment:
-ai_text:
-recommend:
-katex:
-reprint:
-locate:
+  - 主题魔改
+abbrlink: 7010544e  # hexo-abbrlink 生成的永久短链接标识（必填，用于替换动态链接，避免链接失效）
+date: 2025-10-25 17:25:49 # 文章发布时间（必填）
+type:  # 文章类型（选填） 常见取值：post（普通文章，默认）、page（独立页面）、draft（草稿，不会生成静态文件）
+comment: # 评论功能开关（选填） 取值：true（开启，默认）、false（关闭）
+ai_text:  # AI 生成内容标记（选填）
+recommend: true  # 文章推荐标记（选填） 取值：true（加入推荐列表）、false（不推荐）
+reprint:  # 转载声明（选填）取值：转载来源链接或描述（如“转载自 xxx 博客”）
+locate: # 位置信息（选填）取值：具体地理位置（如“北京”“上海”）或经纬度
 ---
 
 
