@@ -107,6 +107,21 @@ locate:
 ### 2. 添加机器人
 1. 打开 Telegram，搜索 [@BotFather](https://t.me/BotFather)，向其发送 `/newbot`，按提示给机器人起一个名称（需以 Bot 或 -bot 结尾，且不能与现有机器人重名，重复会有提示），创建成功后记录机器人的 API Token（后续需用到）。
 
+
+     /newbot 回车发送。
+     
+     botfarther会反馈
+Alright, a new bot. How are we going to call it? Please choose a name for your bot.
+
+    输入你要创建的bot名字。例如peiqi123_bot,回车发送
+
+    它会反馈 Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.
+
+    我再输入 peiqi123_bot。这是这个机器人的名字。
+
+    它会反馈Done! Congratulations on your new bot. You will find it at******
+
+
 ![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886861_asynccode)
 
 2. 新建一个 Telegram 频道（名称自定义），将刚才创建的机器人拉进频道并设为管理员：点击频道设置中的 "添加管理员"，输入机器人名称并完成授权。
@@ -148,7 +163,6 @@ locate:
 在 "系统设置" 中找到 Telegram 相关配置项，将第四步记录的 `TG_BOT_TOKEN` 和 `TG_CHAT_ID` 填入对应位置，点击 "保存设置"。
 
 ![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886447_asynccode)
-
 ### 3. 其他关键设置
 安全设置（设置管理员账号密码，防止他人篡改配置）、上传设置（选择默认存储渠道、设置文件大小限制等），可参考官方文档说明进行个性化配置。
 
@@ -156,13 +170,23 @@ locate:
 ![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375892456_asynccode)
 
 
-## 🤔待解决问题
+### ⚠️ 重要提醒：关闭图像审查功能可大幅提升图片上传速度
 
-1. 访问图片可以通过套CDN来进行加速，可以看进阶教程：[给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能](https://www.yunsen2025.top/015-cloudflare-imgbed-fen-xian-pei-zhi-guo-nei-cdn/)。但是感觉加速不明细不知道是不是我的操作不对。
-2. 上传图片慢问题，上传图片到放回链接基本需要15秒以上，有的时候需要30秒这个速度太慢了，这个项目我看是基于[Telegraph-Image](https://github.com/cf-pages/Telegraph-Image)修改了前端，但是我部署这个项目上传基本10秒内都可以返回图片链接，速度比这个快。[Telegraph-Image]()这个我部署了也可以对比测试一下。
-3. 页面标题跳转的作者仓库链接，页面底部版权信息 "2024-2025 Designed by sanyueQi for You!" 我去仓库代码修改后，会导致后面作者更新仓库后无法更新，最后我放弃了修改。
+若您遇到图片上传缓慢的问题，请注意**图像审查功能**的关键影响：
 
-若有大佬知道我的问题如何解决，欢迎留言告知！
+- **开启状态**：图片从上传到返回链接耗时**30秒以上**，严重拖慢操作效率；
+
+- **关闭状态**：上传耗时可缩短至**5秒内**，体验流畅高效。
+
+此问题曾困扰我多时，最终咨询作者后才确认根本原因。**若您无需图像审查功能，建议关闭**，以获得更顺畅的使用体验。
+![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765187953308_image.png)
+
+![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765187298678_image.png)
+
+
+## 🤔进阶方案
+
+1. 访问图片可以通过套CDN来进行加速，可以看进阶教程：[给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能](https://hexo.814925.xyz/posts/6af1456/)
 
 ## ⚠️ 须知
 技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 全球节点加速，实现图片低延迟、高可用访问。
