@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速 | 野猪佩奇弟弟</title><noscript>开启JavaScript才能访问本站哦~</noscript><link rel="icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css?v=3.0.21"><link rel="canonical" href="https://runwang925.github.io/posts/2c634b61/index.html"><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/font-awesome/6.7.2/css/all.min.css"><!-- Feature-specific CSS--><!-- aplayer--><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="前言作为一个爱折腾的宅，我在本地搭了 NAS，就想在外边随时访问，这时候就得搞内网穿透。之前陆续用过 zerotier、FRP、cloudflare 这些服务，但我家宽带只有 IPv6 公网地址，IPv4 还是内网 —— 直接用 IPv6 访问吧，又只能在支持 IPv6 的环境用，兼容性太差了。 直"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="野猪佩奇弟弟"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="/img/favicon.ico"><link rel="apple-touch-icon" href="/img/favicon.ico" sizes="180x180"><script>console.log(' %c Solitude %c ' + '3.0.21' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+            },
+            diffDateFormat: (selector) => {
+                selector.forEach(item => {
+                    const date = new Date(item.getAttribute('datetime') || item.textContent);
+                    item.textContent = (date.getMonth() + 1).toString()+'/'+date.getDate().toString();
+                });
+            },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: {"appId":"309DUJATH7","apiKey":"c4c57e5c5309f40baa32690a524326a3","indexName":"hexopeiqi","hits":{"per_page":10}},
+    localsearch: undefined,
+    runtime: '2023-04-20 00:00:00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: true,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"复制成功","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请遵循GPL协议。","totalk":"无需删除空行，直接输入评论即可","search":{"empty":"找不到你查询的内容：${query}","hit":"找到 ${hits} 条结果，用时 ${time} 毫秒","placeholder":"输入关键词快速查找","count":"共 <b>${count}</b> 条结果。","loading":"搜索中..."}},
+    aside: {
+        state: {
+            morning: "✨ 早上好，新的一天开始了",
+            noon: "🍲 午餐时间",
+            afternoon: "🌞 下午好",
+            night: "早点休息",
+            goodnight: "晚安 😴",
+        },
+        witty_words: ["你可以的","你一定可以的","祝你好运，陌生人"],
+        witty_comment: {
+            prefix: '好久不见，',
+            back: '欢迎再次回来，',
+        },
+    },
+    covercolor: {
+        enable: true
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 8.0.0"><link rel="alternate" href="/atom.xml" title="野猪佩奇弟弟" type="application/atom+xml">
+</head><body id="body"><div><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fas fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">内网穿透<sup>2</sup></a><a href="/tags/%E8%85%BE%E8%AE%AFEdgeOne/">腾讯EdgeOne<sup>4</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>4</sup></a><a href="/tags/Cloudflare/">Cloudflare<sup>4</sup></a><a href="/tags/CloudFlare-ImgBed/">CloudFlare-ImgBed<sup>4</sup></a><a href="/tags/CDN/">CDN<sup>2</sup></a><a href="/tags/hexo/">hexo<sup>2</sup></a><a href="/tags/solitude/">solitude<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98%E9%AD%94%E6%94%B9/">主题魔改<sup>2</sup></a><a href="/tags/%E8%87%AA%E5%BB%BA%E8%8A%82%E7%82%B9/">自建节点<sup>1</sup></a><a href="/tags/Github/">Github<sup>1</sup></a><a href="/tags/check-flink/">check-flink<sup>1</sup></a><a href="/tags/Solitude/">Solitude<sup>2</sup></a><a href="/tags/EdgeonePages/">EdgeonePages<sup>1</sup></a><a href="/tags/Waline/">Waline<sup>1</sup></a><a href="/tags/%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/">评论系统<sup>1</sup></a><a href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/">腾讯云EdgeonePages<sup>1</sup></a><a href="/tags/%E5%B0%81%E9%9D%A2/">封面<sup>1</sup></a><a href="/tags/%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98/">对象储存<sup>1</sup></a><a href="/tags/Lsky-Pro/">Lsky-Pro+<sup>1</sup></a><a href="/tags/%E5%85%B0%E7%A9%BA%E5%9B%BE%E5%BA%8A/">兰空图床<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="item"><a href="/archives/2026/01/"><span class="date">2026/01</span><div class="count-group"><span class="count">4</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2025/12/"><span class="date">2025/12</span><div class="count-group"><span class="count">2</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2025/11/"><span class="date">2025/11</span><div class="count-group"><span class="count">2</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2025/10/"><span class="date">2025/10</span><div class="count-group"><span class="count">4</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/2024/11/"><span class="date">2024/11</span><div class="count-group"><span class="count">2</span><span class="unit">篇</span></div></a></li><li class="item"><a href="/archives/"><span class="date">全部文章</span><div class="count-group"><span class="count">14</span><span class="unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fas fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div></div><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/recentcomments/"><div class="headline">评论</div><div class="length-num" id="waline_allcount"><i class="solitude fas fa-spinner fa-spin"></i></div><script pjax="pjax">(async () => {
+  await fetch('https://waline.814925.xyz/api/comment?type=count', {method: 'GET'}).then(async res => res.json())
+    .then(async data => {
+      document.querySelector('#waline_allcount').innerHTML = data.data
+    })
+})()</script></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fas fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>文章列表</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>友链</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>我的</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-user"></i><span>关于本站</span></a></li><li><a class="site-page child" href="/message/"><i class="solitude  fas fa-comment"></i><span>留言板</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="card-tag-cloud"><a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">内网穿透<sup>2</sup></a><a href="/tags/%E8%85%BE%E8%AE%AFEdgeOne/">腾讯EdgeOne<sup>4</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>4</sup></a><a href="/tags/Cloudflare/">Cloudflare<sup>4</sup></a><a href="/tags/CloudFlare-ImgBed/">CloudFlare-ImgBed<sup>4</sup></a><a href="/tags/CDN/">CDN<sup>2</sup></a><a href="/tags/hexo/">hexo<sup>2</sup></a><a href="/tags/solitude/">solitude<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98%E9%AD%94%E6%94%B9/">主题魔改<sup>2</sup></a><a href="/tags/%E8%87%AA%E5%BB%BA%E8%8A%82%E7%82%B9/">自建节点<sup>1</sup></a><a href="/tags/Github/">Github<sup>1</sup></a><a href="/tags/check-flink/">check-flink<sup>1</sup></a><a href="/tags/Solitude/">Solitude<sup>2</sup></a><a href="/tags/EdgeonePages/">EdgeonePages<sup>1</sup></a><a href="/tags/Waline/">Waline<sup>1</sup></a><a href="/tags/%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/">评论系统<sup>1</sup></a><a href="/tags/%E8%85%BE%E8%AE%AF%E4%BA%91EdgeonePages/">腾讯云EdgeonePages<sup>1</sup></a><a href="/tags/%E5%B0%81%E9%9D%A2/">封面<sup>1</sup></a><a href="/tags/%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98/">对象储存<sup>1</sup></a><a href="/tags/Lsky-Pro/">Lsky-Pro+<sup>1</sup></a><a href="/tags/%E5%85%B0%E7%A9%BA%E5%9B%BE%E5%BA%8A/">兰空图床<sup>1</sup></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><a href="/" title="返回博客主页" id="site-name"><span class="title">野猪佩奇弟弟</span><i class="solitude fas fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>文章列表</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>友链</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>我的</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-user"></i><span>关于本站</span></a></li><li><a class="site-page child" href="/message/"><i class="solitude  fas fa-comment"></i><span>留言板</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索"><i class="solitude fas fa-magnifying-glass"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fas fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fas fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="https://imgteo.814925.xyz/file/peiqi-uploads/1767756718431_cover_692198.png" alt="NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/">网站建设</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>内网穿透</span></a><a class="post-meta__tags" href="/tags/%E8%85%BE%E8%AE%AFEdgeOne/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>腾讯EdgeOne</span></a></div></div></div></div><h1 class="post-title">NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2026-01-07 10:30:49"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2026-01-07T02:30:49.000Z">2026-01-07T02:30:49.000Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fas fa-file-word" title="文章字数"></i><span class="word-count">1.5k</span><span class="post-meta-separator"></span></span><span class="post-meta-commentcount" title="评论数" onclick="sco.scrollTo('post-comment')"><i class="solitude fas fa-comment"></i><a href="/posts/2c634b61/#post-comment"><span class="waline-comment-count"><i class="solitude fas fa-spinner fa-spin"></i></span></a></span></div></div></div><div class="post-radius-bottom"></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>作为一个爱折腾的宅，我在本地搭了 NAS，就想在外边随时访问，这时候就得搞内网穿透。之前陆续用过 zerotier、FRP、cloudflare 这些服务，但我家宽带只有 IPv6 公网地址，IPv4 还是内网 —— 直接用 IPv6 访问吧，又只能在支持 IPv6 的环境用，兼容性太差了。</p>
+<p>直到发现腾讯云边缘计算 EO（EdgeOne）支持 IPv6 源站，再搭配 DDNS 动态域名解析，终于搞定了低成本的内网穿透！不过部署好之后，实际用着怎么样？访问速度够不够？有没有什么限制？这篇文章不教详细部署步骤，主要就是实测这些实际使用效果，给同样有需求的朋友一个参考～</p>
+<p>这个原理和 Cloudflare ipv4+ipv6双栈访问基本一致，但是腾讯EdgeOne国内优化更加好。</p>
+<h2 id="网络环境"><a href="#网络环境" class="headerlink" title="网络环境"></a>网络环境</h2><ul>
+<li>地址类型：拥有公网V6地址，无公网V4地址；</li>
+<li>宽带信息：联通宽带签约上行速率50Mbps。</li>
+</ul>
+<h2 id="原始访问信息（本地HFS服务）"><a href="#原始访问信息（本地HFS服务）" class="headerlink" title="原始访问信息（本地HFS服务）"></a>原始访问信息（本地HFS服务）</h2><ul>
+<li>访问地址：<a target="_blank" rel="noopener" href="http://hfs.814925.xyz:8963/%EF%BC%88%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90V6%E5%9C%B0%E5%9D%80+%E7%AB%AF%E5%8F%A38963%EF%BC%8CHFS%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E5%85%A5%E5%8F%A3%EF%BC%89%EF%BC%9B">http://hfs.814925.xyz:8963/（域名解析V6地址+端口8963，HFS服务访问入口）；</a></li>
+<li>访问状态：手机流量、其他IPv6环境下可正常直连访问；</li>
+<li>下载性能：IPv6环境下，直连速度稳定在5-8MB&#x2F;S，基本跑满宽带上行速率；</li>
+<li>无IPV6环境无法访问。</li>
+</ul>
+<h2 id="EdgeOne免费套餐配置及后续操作"><a href="#EdgeOne免费套餐配置及后续操作" class="headerlink" title="EdgeOne免费套餐配置及后续操作"></a>EdgeOne免费套餐配置及后续操作</h2><h3 id="（1）核心配置（需完成域名备案）"><a href="#（1）核心配置（需完成域名备案）" class="headerlink" title="（1）核心配置（需完成域名备案）"></a>（1）核心配置（需完成域名备案）</h3><ul>
+<li>加速域名（B域名）：<a target="_blank" rel="noopener" href="http://hfs1.814925.xyz/">hfs1.814925.xyz</a>；</li>
+<li>IPv6设置：开启IPv6访问；</li>
+<li>回源配置：回源域名（A域名）<a target="_blank" rel="noopener" href="http://hfs.814925.xyz/">hfs.814925.xyz</a>、回源协议HTTP、回源端口8963、回源host选择使用加速域名（<a target="_blank" rel="noopener" href="http://hfs1.814925.xyz/">hfs1.814925.xyz</a>）。</li>
+</ul>
+<h3 id="（2）后续操作与访问便利性"><a href="#（2）后续操作与访问便利性" class="headerlink" title="（2）后续操作与访问便利性"></a>（2）后续操作与访问便利性</h3><ul>
+<li>安全配置：开启免费HTTPS证书，等待配置生效；</li>
+<li>访问方式：加速后地址hfs1.814925.xyz，无需额外添加端口号，自带HTTPS证书，访问速度快；</li>
+<li>环境兼容性：IPv4、IPv6环境下访问加速域名均能正常访问本地HFS服务。</li>
+</ul>
+<h2 id="访问机制"><a href="#访问机制" class="headerlink" title="访问机制"></a>访问机制</h2><h3 id="（1）完整访问流程（替换后域名）"><a href="#（1）完整访问流程（替换后域名）" class="headerlink" title="（1）完整访问流程（替换后域名）"></a>（1）完整访问流程（替换后域名）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">公网用户（IPv4/IPv6）</span><br><span class="line">        ↓</span><br><span class="line">腾讯云EdgeOne（加速域名/B域名：hfs1.814925.xyz）</span><br><span class="line">        ↓</span><br><span class="line">原始域名/A域名（hfs.814925.xyz:8963）</span><br><span class="line">        ↓</span><br><span class="line">本地HFS服务</span><br></pre></td></tr></table></figure>
+
+<h3 id="（2）中转逻辑说明"><a href="#（2）中转逻辑说明" class="headerlink" title="（2）中转逻辑说明"></a>（2）中转逻辑说明</h3><p>所有访问（无论访问环境是否支持IPv6）均无法直连HFS服务，需通过EdgeOne中转；推测中转逻辑为：访问请求&#x2F;文件先路由至腾讯服务器，再由腾讯服务器转发至原始域名，最终指向本地HFS服务。</p>
+<h2 id="速度暴力测试下载-访问性能细节"><a href="#速度暴力测试下载-访问性能细节" class="headerlink" title="速度暴力测试下载&#x2F;访问性能细节"></a>速度暴力测试下载&#x2F;访问性能细节</h2><h3 id="（1）单文件下载性能"><a href="#（1）单文件下载性能" class="headerlink" title="（1）单文件下载性能"></a>（1）单文件下载性能</h3><ul>
+<li>小文件（10MB以下）：<ul>
+<li>IPv4&#x2F;IPv6环境：基本满速运行，可达到宽带上传瓶颈；</li>
+<li>瞬时速度：<code>5.1 MiB/s</code>（注：MiB 是二进制单位，1 MiB≈1.05 MB，因此实际速度约 5.35 MB&#x2F;s，对应网络带宽约 42.8 Mbps）由于文件太小了无法通过浏览器下载查看速度 只能通过命令测试</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://imgteo.814925.xyz/file/peiqi-uploads/1767757035989_09fdc16274eac1cd5f970a5f0e801e48__fallback_source_1_height_1280_mount_node_token_DvFzdV1Nvox3sXxOSRLcCmVXnyg_mount_point_docx_image_policy_equal_width_1280.png" alt="09fdc16274eac1cd5f970a5f0e801e48__fallback_source&#x3D;1&amp;height&#x3D;1280&amp;mount_node_token&#x3D;DvFzdV1Nvox3sXxOSRLcCmVXnyg&amp;mount_point&#x3D;docx_image&amp;policy&#x3D;equal&amp;width&#x3D;1280.png"></p>
+<ul>
+<li>大文件（几百MB或几GB）：<ul>
+<li>IPv4&#x2F;IPv6环境：初始下载速度5-8MB&#x2F;S（持续几秒），后续稳定在500kb&#x2F;s左右（推测为腾讯服务器单线路限速）；</li>
+</ul>
+</li>
+<li>多线路叠加效果<ul>
+<li>多个访客同时访问&#x2F;下载，每条线路速度均为对应环境下的限速值（约500kb&#x2F;s），总速度可叠加至宽带上行瓶颈（例如：宽带上行上限5000kb&#x2F;s时，可支持10个访客同下载都是500kb&#x2F;s）</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://imgteo.814925.xyz/file/peiqi-uploads/1767757076783_6d3f649b3275dbe8dac35d76cef1e19a_1de63f69-366b-4c3f-93b9-032ef624b70e.png" alt="6d3f649b3275dbe8dac35d76cef1e19a_1de63f69-366b-4c3f-93b9-032ef624b70e.png"></p>
+<h2 id="优缺点及适用场景"><a href="#优缺点及适用场景" class="headerlink" title="优缺点及适用场景"></a>优缺点及适用场景</h2><h3 id="（1）缺点"><a href="#（1）缺点" class="headerlink" title="（1）缺点"></a>（1）缺点</h3><ul>
+<li>连接限制：即使在IPv6环境下，也无法直连本地HFS服务，必须经过EdgeOne中转；如果直连V6域名可以达到速度应该是5-8MB&#x2F;s</li>
+</ul>
+<p><img src="https://imgteo.814925.xyz/file/peiqi-uploads/1767757097783_56be36cde076ac1924586d0f6dbbdd48_c5db9aeb-de67-4efe-8704-4fb0ae34db89.png" alt="56be36cde076ac1924586d0f6dbbdd48_c5db9aeb-de67-4efe-8704-4fb0ae34db89.png"></p>
+<ul>
+<li>性能局限：大文件传输&#x2F;访问无法达到宽带满速，且受腾讯服务器单线路限速；</li>
+</ul>
+<h3 id="（2）适用场景"><a href="#（2）适用场景" class="headerlink" title="（2）适用场景"></a>（2）适用场景</h3><ul>
+<li>搭建公开可访问的本地博客、自用的图床等（兼容IPv4&#x2F;IPv6所有公网用户，无需用户手动加端口）；</li>
+<li>小文件传输（我测试应该10MB以下或者左右）；</li>
+<li>需调速、对传输速率要求不高的网络访问&#x2F;传输场景；</li>
+</ul>
+<h3 id="（3）不适用场景"><a href="#（3）不适用场景" class="headerlink" title="（3）不适用场景"></a>（3）不适用场景</h3><ul>
+<li>视频类资源在线播放（需稳定满速带宽支持，限速环境下体验较差）；</li>
+<li>大文件（几百MB及以上）快速下载&#x2F;传输场景；</li>
+</ul>
+<h2 id="IPv6网络政策限速补充说明"><a href="#IPv6网络政策限速补充说明" class="headerlink" title="IPv6网络政策限速补充说明"></a>IPv6网络政策限速补充说明</h2><h3 id="（1）IPv6限速背景"><a href="#（1）IPv6限速背景" class="headerlink" title="（1）IPv6限速背景"></a>（1）IPv6限速背景</h3><p>部分地区运营商为配合 PCDN（点对点内容分发网络）治理工作，采取了 “一刀切” 式 IPv6 网络限速措施 —— 无论用户是否实际使用 PCDN 服务，均可能被限制 IPv6 公网访问速率。</p>
+<p>我真实测试如下：</p>
+<ul>
+<li>联通（贵州）：未对 IPv6 进行任何速率限制，无论同运营商还是跨运营商访问，均能跑满宽带上行速率；</li>
+<li>电信（贵州）：对 IPv6 公网访问统一限速至 500kb&#x2F;s，无论同运营商还是跨运营商访问；</li>
+<li>部分地区：仅在跨运营商访问时，IPv6 速率才会被限制。</li>
+</ul>
+<h3 id="（2）IPv6限速对EdgeOne影响"><a href="#（2）IPv6限速对EdgeOne影响" class="headerlink" title="（2）IPv6限速对EdgeOne影响"></a>（2）IPv6限速对EdgeOne影响</h3><p>若本地IPv6直连已被限制在500kb&#x2F;s（例如我测试的贵州电信），即使通过EdgeOne中转，最终访客的访问速度也无法突破该限速（EdgeOne回源需通过本地IPv6网络，受限于本地限速瓶颈）；</p>
+<h2 id="总结建议"><a href="#总结建议" class="headerlink" title="总结建议"></a>总结建议</h2><ul>
+<li>部署前先测试本地IPv6直连速度，确认是否存在地区&#x2F;运营商政策限速，避免因限速导致加速效果不达预期；</li>
+<li>如果NAS服务，如果是小流量比如调试、图床、推荐使用，如果是视频这样的就不推荐了。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><div class="post-copyright__author_img"><img class="post-copyright__author_img_front" src="/img/logo.png"></div><div class="post-copyright__author_name">野猪佩奇弟弟</div><div class="post-copyright__author_desc">记录让幸福可以翻阅</div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div><div class="post-reward"><div class="reward-button" title="赞赏作者" onclick="AddRewardMask()"><i class="solitude fas fa-heart"></i>赞赏作者</div><div class="reward-main"><ul class="reward-all"><span class="reward-title">感谢您的赞赏</span><ul class="reward-group"><li class="reward-item"><a target="_blank" rel="noopener" href="https://imgteo.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg"><img class="post-qr-code-img nolazyload" src="https://imgteo.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg" alt="微信" style="border-color: var(--efu-black)"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a target="_blank" rel="noopener" href="https://imgteo.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg"><img class="post-qr-code-img nolazyload" src="https://imgteo.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg" alt="支付宝" style="border-color: var(--efu-black)"></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/rewards/"><div class="reward-text">赞赏名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值</div></a></ul></div></div><script>function RemoveRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "none";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "none";
+    }
+}
+
+function AddRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "flex";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "flex";
+    }
+}</script></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文是原创文章，采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">野猪佩奇弟弟</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>内网穿透<span class="tagsPageCount">2</span></span></a><a class="post-meta__tags" href="/tags/%E8%85%BE%E8%AE%AFEdgeOne/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>腾讯EdgeOne<span class="tagsPageCount">4</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/8133eb58/"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">2026 最新版：基于腾讯云 EdgeOne 的 IPv6 内网穿透指南（无公网 IPv4 也能实现NAS）</div></div></a></div><div class="next-post pull-right"><a href="/posts/7424eb56/"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CloudFlare-ImgBed图床免费提速不踩坑！三种加速方案对比：CF 域名优选 / 多吉云CDN / EdgeOne 谁更适合你</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fas fa-comment"></i><span> 评论</span><span class="count"> (<span class="waline-comment-count"><i class="solitude fas fa-spinner fa-spin"></i></span>)</span></div></div><div class="comment-wrap"><div id="waline-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="top-group"><div class="sayhi" id="sayhi" onclick="sco.changeWittyWord()"></div></div></div><div class="avatar"><img alt="头像" src="/img/touxiangpq.png"></div><div class="description"></div><div class="bottom-group"><span class="left"><div class="name">野猪佩奇弟弟</div><div class="desc">只有迎风，风筝才能飞得更高。</div></span><div class="social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/everfu" title="Github"><i class="solitude  fab fa-github"></i></a><a class="social-icon" target="_blank" rel="noopener" href="https://space.bilibili.com/1329819902" title="Bilibili"><i class="solitude  fab fa-bilibili"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fas fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%8E%AF%E5%A2%83"><span class="toc-text">网络环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E8%AE%BF%E9%97%AE%E4%BF%A1%E6%81%AF%EF%BC%88%E6%9C%AC%E5%9C%B0HFS%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="toc-text">原始访问信息（本地HFS服务）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EdgeOne%E5%85%8D%E8%B4%B9%E5%A5%97%E9%A4%90%E9%85%8D%E7%BD%AE%E5%8F%8A%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C"><span class="toc-text">EdgeOne免费套餐配置及后续操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%EF%BC%88%E9%9C%80%E5%AE%8C%E6%88%90%E5%9F%9F%E5%90%8D%E5%A4%87%E6%A1%88%EF%BC%89"><span class="toc-text">（1）核心配置（需完成域名备案）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C%E4%B8%8E%E8%AE%BF%E9%97%AE%E4%BE%BF%E5%88%A9%E6%80%A7"><span class="toc-text">（2）后续操作与访问便利性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%9C%BA%E5%88%B6"><span class="toc-text">访问机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%8C%E6%95%B4%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B%EF%BC%88%E6%9B%BF%E6%8D%A2%E5%90%8E%E5%9F%9F%E5%90%8D%EF%BC%89"><span class="toc-text">（1）完整访问流程（替换后域名）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%B8%AD%E8%BD%AC%E9%80%BB%E8%BE%91%E8%AF%B4%E6%98%8E"><span class="toc-text">（2）中转逻辑说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E5%BA%A6%E6%9A%B4%E5%8A%9B%E6%B5%8B%E8%AF%95%E4%B8%8B%E8%BD%BD-%E8%AE%BF%E9%97%AE%E6%80%A7%E8%83%BD%E7%BB%86%E8%8A%82"><span class="toc-text">速度暴力测试下载&#x2F;访问性能细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%80%A7%E8%83%BD"><span class="toc-text">（1）单文件下载性能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9%E5%8F%8A%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">优缺点及适用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%BC%BA%E7%82%B9"><span class="toc-text">（1）缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">（2）适用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%B8%8D%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">（3）不适用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv6%E7%BD%91%E7%BB%9C%E6%94%BF%E7%AD%96%E9%99%90%E9%80%9F%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-text">IPv6网络政策限速补充说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89IPv6%E9%99%90%E9%80%9F%E8%83%8C%E6%99%AF"><span class="toc-text">（1）IPv6限速背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89IPv6%E9%99%90%E9%80%9F%E5%AF%B9EdgeOne%E5%BD%B1%E5%93%8D"><span class="toc-text">（2）IPv6限速对EdgeOne影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%BB%BA%E8%AE%AE"><span class="toc-text">总结建议</span></a></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fas fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/posts/d26acfdd/" title="基于 Cloudflare Workers自建代理节点"><div class="thumbnail"><img alt="基于 Cloudflare Workers自建代理节点" src="https://imgteo.814925.xyz/file/peiqi-uploads/1767759765556_cover_730598.png"></div><div class="content"><span class="title" href="/posts/d26acfdd/" title="基于 Cloudflare Workers自建代理节点">基于 Cloudflare Workers自建代理节点</span><span class="categories" href="/posts/d26acfdd/">网站建设</span></div></a><a class="aside-list-item" href="/posts/8133eb58/" title="2026 最新版：基于腾讯云 EdgeOne 的 IPv6 内网穿透指南（无公网 IPv4 也能实现NAS）"><div class="thumbnail"><img alt="2026 最新版：基于腾讯云 EdgeOne 的 IPv6 内网穿透指南（无公网 IPv4 也能实现NAS）" src="https://imgteo.814925.xyz/file/waline/1767759247163_cover_230877.png"></div><div class="content"><span class="title" href="/posts/8133eb58/" title="2026 最新版：基于腾讯云 EdgeOne 的 IPv6 内网穿透指南（无公网 IPv4 也能实现NAS）">2026 最新版：基于腾讯云 EdgeOne 的 IPv6 内网穿透指南（无公网 IPv4 也能实现NAS）</span><span class="categories" href="/posts/8133eb58/">网站建设</span></div></a><a class="aside-list-item" href="/posts/2c634b61/" title="NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速"><div class="thumbnail"><img alt="NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速" src="https://imgteo.814925.xyz/file/peiqi-uploads/1767756718431_cover_692198.png"></div><div class="content"><span class="title" href="/posts/2c634b61/" title="NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速">NAS 外网访问实操：腾讯云 EdgeOne IPv6 穿透（无公网 IPv4）部署与测速</span><span class="categories" href="/posts/2c634b61/">网站建设</span></div></a><a class="aside-list-item" href="/posts/7424eb56/" title="CloudFlare-ImgBed图床免费提速不踩坑！三种加速方案对比：CF 域名优选 / 多吉云CDN / EdgeOne 谁更适合你"><div class="thumbnail"><img alt="CloudFlare-ImgBed图床免费提速不踩坑！三种加速方案对比：CF 域名优选 / 多吉云CDN / EdgeOne 谁更适合你" src="https://imgteo.814925.xyz/file/peiqi-uploads/1767754996872_cover_866391.png"></div><div class="content"><span class="title" href="/posts/7424eb56/" title="CloudFlare-ImgBed图床免费提速不踩坑！三种加速方案对比：CF 域名优选 / 多吉云CDN / EdgeOne 谁更适合你">CloudFlare-ImgBed图床免费提速不踩坑！三种加速方案对比：CF 域名优选 / 多吉云CDN / EdgeOne 谁更适合你</span><span class="categories" href="/posts/7424eb56/">网站建设</span></div></a><a class="aside-list-item" href="/posts/1c504892/" title="超详细！小白也能看懂的兰空图床付费版（Lsky-Pro+）部署教程"><div class="thumbnail"><img alt="超详细！小白也能看懂的兰空图床付费版（Lsky-Pro+）部署教程" src="https://imgteo.814925.xyz/file/waline/1765956234240_image.png"></div><div class="content"><span class="title" href="/posts/1c504892/" title="超详细！小白也能看懂的兰空图床付费版（Lsky-Pro+）部署教程">超详细！小白也能看懂的兰空图床付费版（Lsky-Pro+）部署教程</span><span class="categories" href="/posts/1c504892/">网站建设</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" target="_blank" rel="noopener" href="https://github.com/everfu" title="Github"><i class="solitude  fab fa-github"></i></a><a class="deal_link" href="mailto:o@everfu.org" title="Mail"><i class="solitude  far fa-envelope"></i></a><div><div class="nolazyload footer_mini_logo" id="footer_mini_logo" title="返回顶部" onclick="sco.toTop()"><img src="/img/touxiangpq.png" alt="返回顶部"></div></div><a class="deal_link" target="_blank" rel="noopener" href="https://space.bilibili.com/1329819902" title="Bilibili"><i class="solitude  fab fa-bilibili"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://v.douyin.com/iJsLc8jt/" title="Douyin"><i class="solitude  fab fa-tiktok"></i></a></div><div><div id="st-footer"><div class="footer-group"><h3 class="footer-title">自建工具</h3><div class="footer-links"><a class="footer-item" target="_blank" rel="noopener" href="https://cover.814925.xyz/" title="封面生成">封面生成</a><a class="footer-item" target="_blank" rel="noopener" href="https://imgteo.814925.xyz/" title="自建图床">自建图床</a><a class="footer-item" target="_blank" rel="noopener" href="https://status.814925.xyz/" title="站点检测">站点检测</a><a class="footer-item" target="_blank" rel="noopener" href="https://rewards.zoerun.qzz.io/" title="支持作者">支持作者</a></div></div><div class="footer-group"><h3 class="footer-title">特别鸣谢</h3><div class="footer-links"><a class="footer-item" target="_blank" rel="noopener" href="https://blog.liushen.fun/" title="清羽飞扬">清羽飞扬</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.qjqq.cn/" title="青桔气球">青桔气球</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.zrf.me/" title="周润发">周润发</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.bsgun.cn/" title="梦爱吃鱼">梦爱吃鱼</a><a class="footer-item" target="_blank" rel="noopener" href="https://blog.quenan.cn/" title="鹊楠">鹊楠</a></div></div><div class="footer-group"><h3 class="footer-title">导航</h3><div class="footer-links"><a class="footer-item" href="/archives/" title="归档">归档</a><a class="footer-item" href="/categories/" title="分类">分类</a><a class="footer-item" href="/tags/" title="标签">标签</a><a class="footer-item" href="/privacy/" title="隐私协议">隐私协议</a><a class="footer-item" href="/cookies/" title="Cookies">Cookies</a><a class="footer-item" href="/copyright/" title="版权协议">版权协议</a></div></div><div class="footer-group"><div class="footer-title-group"><h3 class="footer-title">友链</h3><button class="random-friends-btn" onclick="randomLinksList()" title="友链"><i class="solitude fas fa-arrows-rotate"></i></button></div><div class="footer-links" id="friend-links-in-footer"></div></div></div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2023 - 2026 By<a class="footer-bar-link" href="/" title="野猪佩奇弟弟">野猪佩奇弟弟</a></div><div class="beian-group"><div><a class="footer-bar-link" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch" title="渝公网安备50023302000356号"><div><img class="beian-icon" src="https://beian.mps.gov.cn/img/logo01.dd7ff50e.png" alt="渝公网安备50023302000356号"></div><span class="beian-name">渝公网安备50023302000356号</span></a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/" title="渝ICP备2024044325号-1"><div><img class="beian-icon" src="/img/beian.miit.gov.cn.ico" alt="渝ICP备2024044325号-1"></div><span class="beian-name">渝ICP备2024044325号-1</span></a></div><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" title="框架：Hexo">框架：Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" title="主题：Solitude">主题：Solitude</a></div></div><div><div class="footer-bar-right"><a class="footer-bar-link" href="/rewards/" title="">打赏</a><a class="footer-bar-link" href="/atom.xml" title="">订阅</a><a class="footer-bar-link" href="/copyright/" title=""><i class="solitude fas fa-copyright"></i><i class="solitude fab fa-creative-commons-by"></i><i class="solitude fab fa-creative-commons-nc"></i><i class="solitude fab fa-creative-commons-nd"></i></a><a class="footer-bar-link" href="/about/" title="">关于</a></div></div></div></div><div class="comment-barrage needEndHide"></div></footer></div><div><!-- Critical scripts loaded synchronously--><script src="/js/utils.js?v=3.0.21"></script><script src="/js/main.js?v=3.0.21"></script><!-- Non-critical scripts loaded asynchronously--><script async src="/js/third_party/waterfall.min.js?v=3.0.21"></script><script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/pjax/0.2.8/pjax.min.js"></script><!-- Feature-specific scripts loaded asynchronously--><script defer src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/typeit/8.8.7/index.umd.min.js"></script><script defer src="/js/tw_cn.js?v=3.0.21"></script><!-- UI enhancement scripts--><script defer src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><!-- Music player scripts--><!-- Cover color processing scripts--><script defer src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/color-thief/2.6.0/color-thief.min.js"></script><script defer src="/js/covercolor/local.js?v=3.0.21"></script><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+utils.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+</script><script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/pace/1.2.4/pace.min.js"></script><!-- Search functionality--><script defer src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/instantsearch.js/4.75.7/instantsearch.production.min.js"></script><script defer src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/algoliasearch/5.19.0/algoliasearch.umd.min.js"></script><!-- Right menu functionality--><div class="js-pjax"><div id="waline-wrap"></div><script>(() => {
+    let walineInitFunction = window.walineFn || null
+
+    function initWaline(initFn) {
+        const walineOptions = {
+            el: '#waline-wrap',
+            serverURL: 'https://waline.814925.xyz', // 替换为你的Waline服务端地址
+            pageview: true,
+            dark: 'html[data-theme="dark"]',
+            path: window.location.pathname,
+            comment: true,
+            //适配白雾林's Picbed图床 注册地址https://www.baiwulin.work/
+            imageUploader: (file) => {
+                if (!file) throw new Error('请选择图片');
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadUrl = 'https://www.baiwulin.work/api/v1/upload';
+
+                return fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'cors',
+                    headers: {
+                        'Authorization': 'Bearer 56|QdL8gpQonqX3Isg5f8tnR2xkOtPgd9HcXov7zpLt', // 你的图床Token 
+                        'Accept': 'application/json'
+                    },
+                })
+                .then(resp => {
+                    if (!resp.ok) throw new Error(`上传失败：${resp.status}`);
+                    return resp.json();
+                })
+                .then(resp => {
+                    console.log('图床完整响应：', resp);
+                    // 从links.url提取完整图片URL
+                    const imgUrl = resp.data.links.url;
+                    if (!imgUrl) throw new Error('未找到图片URL字段');
+                    return imgUrl;
+                })
+                .catch(err => {
+                    console.error('图片上传错误：', err);
+                    throw err;
+                });
+            },
+            ...{"markdown":true,"emoji":true,"requiredMeta":["nick","mail"],"pageSize":10,"required":true,"locale":{"placeholder":"📸 支持粘贴图片，将自动上传至图床～ 快来分享你的观点吧～"}}
+        }
+        const walineInstance = initFn(walineOptions)
+        utils.addGlobalFn('pjax', () => walineInstance.destroy(), 'destroyWaline')
+        GLOBAL_CONFIG.lightbox && utils.lightbox(document.querySelectorAll('#comment .wl-content img:not(.wl-emoji)'))
+        sco.owoBig({
+            body: '.wl-emoji-popup',
+            item: '.wl-tab-wrapper button'
+        })
+    }
+
+    async function loadWaline() {
+        if (walineInitFunction) initWaline(walineInitFunction)
+        else {
+            await utils.getCSS('https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/waline/3.4.3/waline.min.css')
+            const {init} = await import('https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/waline/3.4.3/waline.min.js')
+            walineInitFunction = init || Waline.init
+            initWaline(walineInitFunction)
+            window.walineFn = walineInitFunction
+        }
+        false && barrageWaline()
+    }
+
+    if (true || true) {
+        if (true) utils.loadComment(document.getElementById('waline-wrap'), loadWaline)
+        else loadWaline()
+    } else window.loadTwoComment = loadWaline
+})()
+</script></div></div><script>const links = [{"name":"清羽飞扬","link":"https://blog.liushen.fun/"},{"name":"张洪Heo","link":"https://blog.zhheo.com/"},{"name":"青桔气球","link":"https://blog.qjqq.cn/"},{"name":"安知鱼","link":"https://blog.anheyu.com/"},{"name":"鹊楠の小窝","link":"https://blog.quenan.cn/"},{"name":"周润发","link":"https://blog.zrf.me/"},{"name":"梦爱吃鱼","link":"https://blog.bsgun.cn/"},{"name":"野猪佩奇弟弟","link":"https://hexo.814925.xyz/"},{"name":"尘の个人博客","link":"https://blog.mcxiaochen.top/"},{"name":"码字·兮","link":"https://blog.mzxi.cn/"},{"name":"龙星划空","link":"https://blog.245179.xyz/"},{"name":"❖星港◎Star☆","link":"https://blog.starsharbor.com"},{"name":"Mo的记事簿","link":"https://blog.xiowo.net/"},{"name":"唐晓萌的小站","link":"https://halo.zhihuiyun.work/"},{"name":"Yueming & Bolg","link":"https://ideaforge.icu/"},{"name":"santisify","link":"https://santisify.top"},{"name":"Zephyr","link":"https://lorcas.top/"},{"name":"字·兮·书","link":"https://blog.demius.tech/"},{"name":"云野阁","link":"https://yyg.js.cool/"},{"name":"YouYou","link":"https://vpnnew.net/blog/"},{"name":"Sun's Blog","link":"https://blog.sunhaoyuan.top/"},{"name":"温柔鱼-vrou","link":"https://blog.vrou.cn"},{"name":"绘星里（绘星故事屋）","link":"https://blog.storical.fun/"},{"name":"THW’s Blog","link":"https://thw.lol"},{"name":"浮生半刻","link":"https://blog.study996.cn"},{"name":"新锐博客","link":"https://www.xrbk.cn"}]
+const randomText = '点击前往按钮进入随机一个友链，不保证跳转网站的安全性和可用性。本次随机到的是本站友链：⌈ ${name} ⌋'
+function travelling() {
+    const link = links[utils.randomNum(links.length)];
+    Snackbar.show({
+        text: randomText.replace(/\$\{name}/,link.name),
+        duration: 8000,
+        pos: 'top-center',
+        actionText: '前往',
+        onActionClick: function(element) {
+            element.style.opacity = 0;
+            window.open(link.link, '_blank');
+        }
+    });
+}
+</script><script>function randomLinksList() {
+    const linkcard = document.getElementById('friend-links-in-footer');
+    if (linkcard == null) return;
+
+    let data = '';
+    let linksCopy = [...links];
+    let count = Math.min(3, linksCopy.length);
+
+    for (let i = 0; i < count; i++) {
+        let index = utils.randomNum(linksCopy.length);
+        const {link, name} = linksCopy[index];
+        data += `<a class="footer-item" href="${link}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`;
+        linksCopy.splice(index, 1);
+    }
+
+    linkcard.innerHTML = data + '<a class="footer-item" href="/links/">更多</a>';
+}</script><!-- pjax--><script>let pjax = null;
+
+function initPjax() {
+    if (typeof Pjax === 'undefined') {
+        console.warn('Pjax is not loaded yet, retrying...');
+        setTimeout(initPjax, 100);
+        return;
+    }
+
+    pjax = new Pjax({
+        elements: 'a:not([target="_blank"])',
+        selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+        cacheBust: false,
+        analytics: false,
+        scrollRestoration: false
+    })
+
+    // 将 pjax 实例挂载到全局
+    window.pjax = pjax;
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    document.addEventListener('pjax:complete', () => {
+        window.refreshFn()
+
+        document.querySelectorAll('script[data-pjax]').forEach(item => {
+            const newScript = document.createElement('script')
+            const content = item.text || item.textContent || item.innerHTML || ""
+            Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+            newScript.appendChild(document.createTextNode(content))
+            item.parentNode.replaceChild(newScript, item)
+        })
+
+        GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+    })
+
+    document.addEventListener('pjax:error', (e) => {
+        if (e.request.status === 404) {
+            pjax.loadUrl('/404.html')
+        }
+    })
+}
+
+// 初始化 Pjax
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPjax);
+} else {
+    initPjax();
+}</script><!-- google adsense--><div id="algolia-search"><div class="search-dialog"><div class="algolia-navbar"><div class="search-dialog__title" id="algolia-search-title">搜索</div><div class="algolia-tips"><i class="solitude fab fa-algolia"></i><span class="algolia-tips-text">Algolia</span></div><span class="search-close-button"><i class="solitude fas fa-xmark"></i></span></div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><div id="search-results"><div id="algolia-hits"></div></div><div id="algolia-tips"><div id="algolia-pagination"></div><div id="algolia-stats"></div></div></div><div id="search-mask"></div></div><script src="/js/search/algolia.js?v=3.0.21"></script></body></html>
+        <script>
+            const posts = ["posts/d26acfdd/","posts/8133eb58/","posts/2c634b61/","posts/7424eb56/","posts/1c504892/","posts/ea5a9ce1/","posts/4f2ff2ea/","posts/acd80ac1/","posts/6af11725/","posts/6af1456/","posts/7010544e/","posts/f5b7655d/","posts/5ab66853/","posts/7a176405/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
