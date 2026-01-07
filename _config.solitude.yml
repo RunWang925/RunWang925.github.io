@@ -299,12 +299,12 @@ post:
     # 打赏列表
     list:
        - name: 微信
-         qcode: https://cdnimg-doge.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg
-         url: https://cdnimg-doge.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg
+         qcode: https://imgteo.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg
+         url: https://imgteo.814925.xyz/file/1761383026683_e63978add577d7fcc946bd57d595b4bf_wechat.jpg
          color: var(--efu-black)
        - name: 支付宝
-         qcode: https://cdnimg-doge.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg
-         url: https://cdnimg-doge.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg
+         qcode: https://imgteo.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg
+         url: https://imgteo.814925.xyz/file/1761383062036_05e0bb1987e1d71ae824b8f1df8fc659_alipay.jpg
          color: var(--efu-black)
 
   # Share icon
@@ -539,7 +539,7 @@ footer:
   group:
     自建工具:
       封面生成: https://cover.814925.xyz/
-      自建图床: https://cdnimg-doge.814925.xyz/
+      自建图床: https://imgteo.814925.xyz/
       站点检测: https://status.814925.xyz/
       支持作者: https://rewards.zoerun.qzz.io/
 

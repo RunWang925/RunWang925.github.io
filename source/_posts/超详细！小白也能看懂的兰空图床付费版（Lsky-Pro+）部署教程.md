@@ -1,7 +1,7 @@
 ---
 abbrlink: 1c504892
 title: 超详细！小白也能看懂的兰空图床付费版（Lsky-Pro+）部署教程
-cover: 'https://cdnimg-doge.814925.xyz/file/waline/1765956234240_image.png'
+cover: 'https://imgteo.814925.xyz/file/waline/1765956234240_image.png'
 categories:
   - 网站建设
   - 教程分享
@@ -43,7 +43,7 @@ locate:
 
 - 主下载链接：[http://r2.072103.xyz/2xnzlskypro223.zpaq](http://r2.072103.xyz/2xnzlskypro223.zpaq)
 - 解压密码：2xnz二叉树树 （使用 Bandizip，旧版本不支持 zpaq 格式）
-- 备用链接：https://cdnimg-doge.814925.xyz/file/waline/1765866343987_2xnzlskypro223.zip（自己上传无解压密码）
+- 备用链接：https://imgteo.814925.xyz/file/waline/1765866343987_2xnzlskypro223.zip（自己上传无解压密码）
 
 下载后保存到电脑本地，后续会上传到服务器。
 
@@ -87,13 +87,13 @@ locate:
     2. Fileinfo（通用扩展，内存＜1G 可能安装失败）
     3. Imagick（宝塔面板中名称为 imagemagick，需配合独立包安装）
 
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765945246614_image.png)
+![image.png](https://imgteo.814925.xyz/file/waline/1765945246614_image.png)
 
 #### 3.3 解除 PHP 禁用函数
 
 - 需删除的禁用函数（避免安装失败）如果这里不去解除函数，运行安装程序的时候会报错
 
-    ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765950104464_image.png)
+    ![image.png](https://imgteo.814925.xyz/file/waline/1765950104464_image.png)
 
 - 操作：
 
@@ -109,7 +109,7 @@ locate:
     
     6. symlink、readlink
     
-       ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765950676788_image.png)
+       ![image.png](https://imgteo.814925.xyz/file/waline/1765950676788_image.png)
     
     
 
@@ -127,7 +127,7 @@ locate:
   sudo apt install imagemagick
   ```
 
-    ![安装完成后提示](https://cdnimg-doge.814925.xyz/file/waline/1765945383945_image.png)
+    ![安装完成后提示](https://imgteo.814925.xyz/file/waline/1765945383945_image.png)
 
 ## 三、创建站点与上传源码
 
@@ -153,7 +153,7 @@ locate:
 
     3. 点击「确定」完成创建
     
-        ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765949336473_image.png)
+        ![image.png](https://imgteo.814925.xyz/file/waline/1765949336473_image.png)
 
 ### 2. 上传并解压源码
 
@@ -165,14 +165,14 @@ locate:
 
     3. 双击压缩包解压
 
-        ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765949576803_image.png)
+        ![image.png](https://imgteo.814925.xyz/file/waline/1765949576803_image.png)
 
         4.解压完成后删除无用文件：
         
         - 安装包原文件（2xnzlskypro223.zip ）
         - 404.html（默认生成的无用文件）
         
-        ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765949617438_image.png)
+        ![image.png](https://imgteo.814925.xyz/file/waline/1765949617438_image.png)
 
 ### 3. 配置伪静态
 
@@ -197,7 +197,7 @@ locate:
        }
        ```
     
-       ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765949782405_image.png)
+       ![image.png](https://imgteo.814925.xyz/file/waline/1765949782405_image.png)
 
 
 ### 4. 修改运行目录
@@ -208,7 +208,7 @@ locate:
 
     2. 运行目录：选择「/public」，点击「保存」
     
-      ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765958252782_image.png)
+      ![image.png](https://imgteo.814925.xyz/file/waline/1765958252782_image.png)
     
        
 
@@ -227,7 +227,7 @@ chmod +x install.sh
 
  检测状态应该是全部勾选，如果提示缺少就说明前面为未安装成功，去检查对应的扩展
 
- ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765950933236_image.png)
+ ![image.png](https://imgteo.814925.xyz/file/waline/1765950933236_image.png)
 
 
 
@@ -245,11 +245,11 @@ chmod +x install.sh
 
     5. 管理员账号：输入邮箱和密码（后续登录使用）
 
-       ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765951880572_image.png)
+       ![image.png](https://imgteo.814925.xyz/file/waline/1765951880572_image.png)
 
     这样就是提示安装成功了 ，一路回车既可 若提示「无法设置文件所有者」，无需处理，后续功能不影响
 
-    ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765952381284_image.png)
+    ![image.png](https://imgteo.814925.xyz/file/waline/1765952381284_image.png)
 
 
 
@@ -281,7 +281,7 @@ chmod +x install.sh
 
     3. 点击「确定」，启动进程
     
-        ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765952572888_image.png)
+        ![image.png](https://imgteo.814925.xyz/file/waline/1765952572888_image.png)
 
 ### 2. 配置计划任务
 
@@ -311,7 +311,7 @@ chmod +x install.sh
     
        注意：这里打开可能默认有其他代码你全部删除 然后粘贴上面的代码既可
     
-       ![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765952932820_image.png)
+       ![image.png](https://imgteo.814925.xyz/file/waline/1765952932820_image.png)
 
 ## 六、收尾配置
 
@@ -340,4 +340,4 @@ chmod +x install.sh
 4.另外提个实用建议：如果已经部署了付费版，但其实用不上它的很多功能，不如直接换开源版部署 —— 不仅步骤比本教程更简单、还更轻量，对服务器的配置要求也更低，用起来会更省心。
 
 ## ⚠️ 须知
-技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 全球节点加速，实现图片低延迟、高可用访问。
+说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 加速。

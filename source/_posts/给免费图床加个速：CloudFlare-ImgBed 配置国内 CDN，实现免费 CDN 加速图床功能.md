@@ -1,6 +1,6 @@
 ---
 title: 给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能
-cover: 'https://cdnimg-doge.814925.xyz/file/1761615960421_20251028094546865.png'
+cover: 'https://imgdoge.814925.xyz/file/1761615960421_20251028094546865.png'
 categories:
   - 网站建设
 tags:
@@ -17,7 +17,7 @@ recommend:
 katex:
 reprint:
 locate:
---- 
+---
 
 ## 前言
 
@@ -26,39 +26,39 @@ CloudFlare-ImgBed 图床项目完全白嫖，它的操作逻辑足够清晰，�
 直到后来偶然刷到邹云森大佬的文章《为 CloudFlare-ImgBed 配置国内 CDN 并分线路解析，以最低成本享受极致速度！》，才突然有了尝试的念头：既然有成熟方案，不如也给我的图床做次加速优化？顺便把整个过程记录下来，既是复盘也是分享。
 
 教程参考：邹云森[为 CloudFlare-ImgBed 配置国内 CDN 并分线路解析，以最低成本享受极致速度！](https://www.yunsen2025.top/015-cloudflare-imgbed-fen-xian-pei-zhi-guo-nei-cdn/)
-
+这篇文章主要记录配置多吉云CDN相关配置，关于CF优选域名和腾讯 EdgeOne主要是用于对比效果。
 
 
 ## 测试效果
 
 #### 1.图片加载测试
+现有一张文件名为 533.png、大小 10.77MB 的图片，提供四个访问域名，可用于测试并对比不同域名下的图片加载速度。
 
-现有一张文件名为 533.png、大小 10.77MB 的图片，提供两个访问域名，可用于测试并对比不同域名下的图片加载速度。
+<div class='gallery-group-main'>
+{% galleryGroup '未优选默认域名' '默认CF域名' 'https://img.zoerun.qzz.io' 'https://img.zoerun.qzz.io/file/1761531622484_533.png' %}
+{% galleryGroup 'CF域名优选' '白嫖方案用的最多的' 'https://img.814925.xyz' 'https://img.814925.xyz/file/1761531622484_533.png' %}
+{% galleryGroup '多吉云 CDN' '需要备案域名有流量限制20G' 'https://imgdoge.814925.xyz' 'https://imgdoge.814925.xyz/file/1761531622484_533.png' %}
+{% galleryGroup '腾讯 EdgeOne' '需要备案域名无流量限制' 'https://imgteo.814925.xyz' 'https://imgteo.814925.xyz/file/1761531622484_533.png' %}
+</div>
 
-CDN加速域名cdnimg-doge.814925.xyz
-![533.png](https://cdnimg-doge.814925.xyz/file/1761531622484_533.png)
 
-未加速域名img.814925.xyz
-![533.png](https://img.814925.xyz/file/1761531622484_533.png)
+**不过这个测试不够严谨，我只是通过最简单除暴的方式来测试 —— 因为 CF 本身其实也自带 CDN 功能，只是它的 CDN 更偏向海外网络，在国内访问时速度波动会比较大；而多吉云 CDN 和腾讯是专门针对国内网络优化的，理论上不管什么时候访问，速度都更稳定，不会有太大波动。**
 
 
-测试结果：
-
-CDN加速问用时268ms
-
-未加速访问用时7.28s
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1764470357967_image.png)
 
 
 #### 2.成果展示
 
+
+
+
 加速前：
 
-![image-20251027111021136](https://cdnimg-doge.814925.xyz/file/1761538614139_image-20251027111021136.png)
+![image-20251027111021136](https://imgdoge.814925.xyz/file/1761538614139_image-20251027111021136.png)
 
 加速后:
 
-![image-20251027121800711](https://cdnimg-doge.814925.xyz/file/1761538695660_image-20251027121800711.png)
+![image-20251027121800711](https://imgdoge.814925.xyz/file/1761538695660_image-20251027121800711.png)
 
 #### 3.注意
 
@@ -84,13 +84,13 @@ CDN加速问用时268ms
 
 1.来到 pages 的图片管理中，首先绑定上访问域名，并使用 **cname 接入**这里记下他给你的 cname 解析
 
-![image-20251027163851951](https://cdnimg-doge.814925.xyz/file/1761554350000_image-20251027163851951.png)
+![image-20251027163851951](https://imgdoge.814925.xyz/file/1761554350000_image-20251027163851951.png)
 
 2.这时候去域名的 dns 中复制那条 cname解析的记录值，等成功了就可以通过域名访问。然后记录一下cname值。简单说就是先加记录让这里变成活动，然后再删除掉。我阿里云域名不删除好像无法添加后面会导致冲突所以这里删除了。 简单说就是先解析到域名，然后删除域名里面的解析。
 
 3.然后删除域名里面的解析记录，这时候 dns 记录没了，但是 pages 域名界面中这条域名状态还是 活动active。
 
-![image-20251027164202399](https://cdnimg-doge.814925.xyz/file/1761554528265_image-20251027164202399.png)
+![image-20251027164202399](https://imgdoge.814925.xyz/file/1761554528265_image-20251027164202399.png)
 
 
 
@@ -100,19 +100,19 @@ CDN加速问用时268ms
 
 1.来到[华为云 DNS](https://console.huaweicloud.com/dns) 创建一个公网域名
 
-![image-20251027175502109](https://cdnimg-doge.814925.xyz/file/1761558918359_image-20251027175502109.png)
+![image-20251027175502109](https://imgdoge.814925.xyz/file/1761558918359_image-20251027175502109.png)
 
 2.输入你的访问域名 img.814925.xyz
 
-![image-20251027165017951](https://cdnimg-doge.814925.xyz/file/1761555031537_image-20251027165017951.png)
+![image-20251027165017951](https://imgdoge.814925.xyz/file/1761555031537_image-20251027165017951.png)
 
 3.输入后到你的 dns 服务商中，编辑好四条 ns 解析
 
-![image-20251027165358045](https://cdnimg-doge.814925.xyz/file/1761555253018_image-20251027165358045.png)
+![image-20251027165358045](https://imgdoge.814925.xyz/file/1761555253018_image-20251027165358045.png)
 
 4.然后再域名这边添加解析
 
-![img](https://cdnimg-doge.814925.xyz/file/1761555198884_1761555181746_20251027165256178.png)
+![img](https://imgdoge.814925.xyz/file/1761555198884_1761555181746_20251027165256178.png)
 
 5.稍等五分钟，可以看到华为云 dns 的解析验证便通过了
 
@@ -126,13 +126,13 @@ CDN加速问用时268ms
 
 完成实名认证后，来到[域名管理控制台](https://console.dogecloud.com/cdn/list)，创建域名
 
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1764471635395_image.png)
+![image.png](https://imgdoge.814925.xyz/file/waline/1764471635395_image.png)
 注意：这里原作者的教程回源Host选择的时同加速域名
 
 
 完成创建后复制多吉云给你的 cname 域名
 
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1764471924208_image.png)
+![image.png](https://imgdoge.814925.xyz/file/waline/1764471924208_image.png)
 
 ### ④ 华为云 DNS 完成域名解析
 
@@ -140,17 +140,17 @@ CDN加速问用时268ms
 
 1.这里先添加多吉云的解析
 
-![image-20251027170541980](https://cdnimg-doge.814925.xyz/file/1761555955895_image-20251027170541980.png)
+![image-20251027170541980](https://imgdoge.814925.xyz/file/1761555955895_image-20251027170541980.png)
 
 2.稍等五分钟让解析生效，这时候可以看到 pages 和多吉云中你的域名状态变成了 “活动 / 已生效”
 
 3.添加境外线路（地域解析最下面的境外）cname填写第一步pages给的cname域名
 
-![image-20251027171109130](https://cdnimg-doge.814925.xyz/file/1761556284523_image-20251027171109130.png)
+![image-20251027171109130](https://imgdoge.814925.xyz/file/1761556284523_image-20251027171109130.png)
 
 最后效果
 
-![image-20251027171215197](https://cdnimg-doge.814925.xyz/file/1761556341492_image-20251027171215197.png)
+![image-20251027171215197](https://imgdoge.814925.xyz/file/1761556341492_image-20251027171215197.png)
 
 
 
@@ -158,7 +158,7 @@ CDN加速问用时268ms
 
 1.开启 IPV6 访问
 
-![image-20251027171453316](https://cdnimg-doge.814925.xyz/file/1761556502901_image-20251027171453316.png)
+![image-20251027171453316](https://imgdoge.814925.xyz/file/1761556502901_image-20251027171453316.png)
 
 2. 进入 “缓存与访问”，按我这样设置缓存
 
@@ -168,32 +168,32 @@ CDN加速问用时268ms
 | 首页       | /                                                                    | 3 小时                       | 跟随 “全部”    |
 | 目录       | /login                                                               | 1 天                         | 跟随 “全部”    |
 | 目录       | /dashboard                                                           | 1 小时                       | 跟随 “全部”    |
-| 文件类型   | .jpg;.jpeg;.png;.webp;.bpm;.gif;<br/>.svg;.tif;.mp4;.mp3（可补充其他文件） | 3 天                         | 跟随 “全部”    |
+| 文件类型   | .jpg;.jpeg;.png;.webp;.bpm;.gif;.svg;.tif;.mp4;.mp3（可补充其他文件） | 3 天                         | 跟随 “全部”    |
 
 
-![image-20251027171755894](https://cdnimg-doge.814925.xyz/file/1761556688089_image-20251027171755894.png)
+![image-20251027171755894](https://imgdoge.814925.xyz/file/1761556688089_image-20251027171755894.png)
 
 - 1.全部
 
-![image-20251027172122109](https://cdnimg-doge.814925.xyz/file/1761556886169_image-20251027172122109.png)
+![image-20251027172122109](https://imgdoge.814925.xyz/file/1761556886169_image-20251027172122109.png)
 
 
 
 - 2.首页/
 
-![image-20251027172141803](https://cdnimg-doge.814925.xyz/file/1761556906717_image-20251027172141803.png)
+![image-20251027172141803](https://imgdoge.814925.xyz/file/1761556906717_image-20251027172141803.png)
 
 - 3.目录/login
 
-![image-20251027172206302](https://cdnimg-doge.814925.xyz/file/1761556937474_image-20251027172206302.png)
+![image-20251027172206302](https://imgdoge.814925.xyz/file/1761556937474_image-20251027172206302.png)
 
 - 4.目录/dashboard
 
-![image-20251027172230474](https://cdnimg-doge.814925.xyz/file/1761556952965_image-20251027172230474.png)
+![image-20251027172230474](https://imgdoge.814925.xyz/file/1761556952965_image-20251027172230474.png)
 
 - 5.文件类型
 
-![image-20251027172252626](https://cdnimg-doge.814925.xyz/file/1761556984148_image-20251027172252626.png)
+![image-20251027172252626](https://imgdoge.814925.xyz/file/1761556984148_image-20251027172252626.png)
 
 
 
@@ -209,11 +209,11 @@ CDN加速问用时268ms
 
 原理：在发出的请求头中会有 referer 值，这可以理解为引用资源的网址，我们可以设置一个白名单，仅允许我们自己的站点请求这个资源，如果你需要在浏览器中直接访问这个资源，就把下面的空来源也勾上
 
-![image-20251027172817350](https://cdnimg-doge.814925.xyz/file/1761557306362_image-20251027172817350.png)
+![image-20251027172817350](https://imgdoge.814925.xyz/file/1761557306362_image-20251027172817350.png)
 
-> 比如说我的图片链接为 **https://cdnimg-doge.814925.xyz/file/50.png**，我设置了白名单为 ***.814925.xyz**，这时候我的博客 **hexo.814925.xyz** 引用了这个照片，则可以正常使用，如果其他站点（比如 **https://rewards.zoerun.qzz.io/**）引用了这个照片由于 **zoerun.qzz.io** 不在白名单中，则会甩出 **403 Forbidden** 错误，表现为 alt 属性为空
+> 比如说我的图片链接为 **https://imgdoge.814925.xyz/file/50.png**，我设置了白名单为 ***.814925.xyz**，这时候我的博客 **hexo.814925.xyz** 引用了这个照片，则可以正常使用，如果其他站点（比如 **https://rewards.zoerun.qzz.io/**）引用了这个照片由于 **zoerun.qzz.io** 不在白名单中，则会甩出 **403 Forbidden** 错误，表现为 alt 属性为空
 
-![image-20251027173853978](https://cdnimg-doge.814925.xyz/file/1761557943845_image-20251027173853978.png)
+![image-20251027173853978](https://imgdoge.814925.xyz/file/1761557943845_image-20251027173853978.png)
 
 如果需要能够访问加入白名单域名就可以正常访问了。
 
@@ -223,12 +223,15 @@ CDN加速问用时268ms
 
 1.CDN 配置 SSL 证书 多吉云里面的证书无忧这样就无法开启，因为这样解析了CDN。就无法自动给你更新证书，然后自己上传证书有效期只有90天，还是比较麻烦。
 
-![image-20251027174837618](https://cdnimg-doge.814925.xyz/file/1761558530149_image-20251027174837618.png)
+![image-20251027174837618](https://imgdoge.814925.xyz/file/1761558530149_image-20251027174837618.png)
 
 2.我的解决方案是通过第三方工具**AllinSSL** SSL 管理工具实现证书自动更新，不过这种方式需要依赖服务器。如果各位大佬有其他无需额外成本的方案，也欢迎分享～
 
-![image-20251027175136547](https://cdnimg-doge.814925.xyz/file/1761558712668_image-20251027175136547.png)
+![image-20251027175136547](https://imgdoge.814925.xyz/file/1761558712668_image-20251027175136547.png)
 
-
+### 总结
+无备案域名：优先选优选域名方案，是当前更稳妥的选择。
+有备案域名：直接用腾讯 EdgeOne 配置，省心又高效：操作极简，无需繁琐步骤、证书自动配置、流量无任何限制。
+两种方案的详细配置步骤，都可以在我的博客搜索对应关键字查看～
 ## ⚠️ 须知
-技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 全球节点加速，实现图片低延迟、高可用访问。
+技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 加速。

@@ -8,7 +8,7 @@ categories:
 tags:
   - Solitude
   - Waline
-  - CloudFlare ImgBed
+  - CloudFlare-ImgBed
   - 评论系统
 
 date: 2025-11-30 12:10:49

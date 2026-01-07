@@ -1,6 +1,6 @@
 ---
 title: CloudFlare-ImgBed免费无限图床小白部署教程
-cover: 'https://cdnimg-doge.814925.xyz/file/hexo/img/1761377902349_Canvas-Ruom.webp'
+cover: 'https://imgteo.814925.xyz/file/hexo/img/1761377902349_Canvas-Ruom.webp'
 categories:
   - 网站建设
 tags:
@@ -32,14 +32,14 @@ locate:
 ## 第一步：Fork 项目
 访问 [CloudFlare ImgBed 项目](https://github.com/MarSeventh/CloudFlare-ImgBed)，点击右上角的 "Fork" 按钮，将项目 Fork 到自己的 GitHub 仓库。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375872061_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375872061_asynccode)
 
 
 ## 第二步：创建 Pages 项目
 ### 1. 访问 Cloudflare Dashboard 关联仓库
 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)，选择左侧菜单的 "Workers & Pages"，点击 "创建应用程序"，选择 "Pages" 选项卡，点击 "连接到 Git"，最终选择刚才 Fork 的项目。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375871115_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375871115_asynccode)
 
 ### 2. 配置项目设置
 - 项目名称：cloudflare-imgbed（或自定义）
@@ -49,7 +49,7 @@ locate:
 
 **重要提醒**：v2.0 版本的构建命令已变更为 `npm install`，请务必确保填写正确，否则部署会失败。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375879155_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375879155_asynccode)
 
 ### 3. 部署项目
 点击 "保存并部署"，等待首次部署完成（约 2-3 分钟），部署成功后即可通过 Cloudflare 生成的临时域名访问。
@@ -89,15 +89,15 @@ locate:
 1. 在 Cloudflare Dashboard 中选择 "存储和数据库"，点击 "KV"，再点击 "创建命名空间"
 2. 输入命名空间名称：`img_url`（建议使用此名称，后续绑定需对应一致）
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375872204_asynccode)
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375872358_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375872204_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375872358_asynccode)
 
 > 注意：若你不使用 R2 存储渠道，可跳过下方 R2 渠道配置步骤。
 
 ### 2. R2 渠道配置（可选）
 进入 Cloudflare "R2 对象存储" 页面，点击 "创建存储桶"，存储桶名称可自定义（示例中使用 `img-r2`），按提示完成创建即可。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375872364_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375872364_asynccode)
 
 
 ## 第四步：Telegram（电报）设置
@@ -122,15 +122,15 @@ Alright, a new bot. How are we going to call it? Please choose a name for your b
     它会反馈Done! Congratulations on your new bot. You will find it at******
 
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886861_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375886861_asynccode)
 
 2. 新建一个 Telegram 频道（名称自定义），将刚才创建的机器人拉进频道并设为管理员：点击频道设置中的 "添加管理员"，输入机器人名称并完成授权。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375880247_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375880247_asynccode)
 
 3. 在频道内随便发送一条消息，将该消息转发到 [@VersaToolsBot](https://t.me/VersaToolsBot)，机器人会返回频道的详细信息，记录其中的频道 ID（后续需用到）。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375885667_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375885667_asynccode)
 
 ### 3. 整理需要的 KEY
 到这里 Telegram 配置步骤完毕，需保存以下两个关键信息：
@@ -143,7 +143,7 @@ Alright, a new bot. How are we going to call it? Please choose a name for your b
 2. 绑定 KV 数据库：变量名填写 `img_url`，选择之前创建的 KV 命名空间
 3. （若配置了 R2）绑定 R2 对象存储：变量名填写 `img_r2`，选择之前创建的 R2 存储桶
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886124_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375886124_asynccode)
 
 
 ## 第六步：重新部署
@@ -157,17 +157,17 @@ Alright, a new bot. How are we going to call it? Please choose a name for your b
 ### 1. 进入后台设置
 访问部署后的项目页面，点击网页右下角的 "设置"，再点击 "系统设置"（首次进入无需密码，直接即可进入）。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886560_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375886560_asynccode)
 
 ### 2. 上传设置：配置 Telegram 存储渠道
 在 "系统设置" 中找到 Telegram 相关配置项，将第四步记录的 `TG_BOT_TOKEN` 和 `TG_CHAT_ID` 填入对应位置，点击 "保存设置"。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375886447_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375886447_asynccode)
 ### 3. 其他关键设置
 安全设置（设置管理员账号密码，防止他人篡改配置）、上传设置（选择默认存储渠道、设置文件大小限制等），可参考官方文档说明进行个性化配置。
 
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375884565_asynccode)
-![img](https://cdnimg-doge.814925.xyz/file/hexo/img/1761375892456_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375884565_asynccode)
+![img](https://imgteo.814925.xyz/file/hexo/img/1761375892456_asynccode)
 
 
 ### ⚠️ 重要提醒：关闭图像审查功能可大幅提升图片上传速度
@@ -179,9 +179,9 @@ Alright, a new bot. How are we going to call it? Please choose a name for your b
 - **关闭状态**：上传耗时可缩短至**5秒内**，体验流畅高效。
 
 此问题曾困扰我多时，最终咨询作者后才确认根本原因。**若您无需图像审查功能，建议关闭**，以获得更顺畅的使用体验。
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765187953308_image.png)
+![image.png](https://imgteo.814925.xyz/file/waline/1765187953308_image.png)
 
-![image.png](https://cdnimg-doge.814925.xyz/file/waline/1765187298678_image.png)
+![image.png](https://imgteo.814925.xyz/file/waline/1765187298678_image.png)
 
 
 ## 🤔进阶方案
@@ -189,4 +189,4 @@ Alright, a new bot. How are we going to call it? Please choose a name for your b
 1. 访问图片可以通过套CDN来进行加速，可以看进阶教程：[给免费图床加个速：CloudFlare-ImgBed 配置国内 CDN，实现免费 CDN 加速图床功能](https://hexo.814925.xyz/posts/6af1456/)
 
 ## ⚠️ 须知
-技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 全球节点加速，实现图片低延迟、高可用访问。
+技术说明：本文图片存储依赖 CloudFlare-ImgBed 图床服务，结合多吉云 CDN 加速。

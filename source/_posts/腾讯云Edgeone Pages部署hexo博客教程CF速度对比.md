@@ -6,7 +6,7 @@ top_group_index: 10
 background: '#fff'
 tags:
   - hexo
-  - EdgeonePages
+  - 腾讯EdgeOne
   - Cloudflare
 categories:
   - 教程分享
@@ -140,4 +140,4 @@ Cloudflare和腾讯云国际版 可以绑定不备案的域名。更加适用于
 如果域名没有备案，可以使用你正在使用`CloudflarePages`和`腾讯云Edgeone Pages`国际版，个人测试感觉腾讯云Edgeone Pages国际比CloudflarePages访问速度要快。
 
 ## ⚠️ 须知
-技术说明：本文图片存储依赖缤纷云（Bitiful）对象存储。之前莫名被扣了几分钱，导致服务无法访问，后续充值最低 10 元后已恢复正常使用。
+技术说明：本文图片存储依赖缤纷云（Bitiful）对象存储。
