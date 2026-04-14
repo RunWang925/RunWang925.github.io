@@ -549,7 +549,7 @@ footer:
       周润发: https://blog.zrf.me/
       梦爱吃鱼: https://blog.bsgun.cn/ 
       鹊楠 : https://blog.quenan.cn/
-
+  
     导航:
       归档: /archives/
       分类: /categories/
@@ -590,6 +590,8 @@ footer:
         - fab fa-creative-commons-nd
     - name: 关于
       url: /about/
+    - name: <img class="nolazyload" src="/img/upyun-logo.png" height="20" style="vertical-align:middle; background:transparent; border:none;" alt="又拍云" title="由 又拍云 提供存储加速">
+      url: https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral/
 
 # --------------------------- end ---------------------------
 
