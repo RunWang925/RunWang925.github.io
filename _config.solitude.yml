@@ -591,8 +591,8 @@ footer:
     - name: 关于
       url: /about/
     - name: <img class="nolazyload" src="/img/upyun-logo.png" height="20" style="vertical-align:middle; background:transparent; border:none;" alt="又拍云" title="由 又拍云 提供存储加速">
-      url: https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral/
-
+      url: https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral
+ 
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
